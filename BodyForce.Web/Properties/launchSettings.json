@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "http": {
+    "BodyForce": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
