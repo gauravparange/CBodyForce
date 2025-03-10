@@ -13,7 +13,6 @@ namespace BodyForce
         public string LastName { get; set; }
         public string? ParentPhoneNo { get; set; }
         public DateTime DOB { get; set; }
-        public int RoleId { get; set; }
         public DateTime DOJ { get; set; }
         public string? Address { get; set; }
         public string? Height { get; set; }

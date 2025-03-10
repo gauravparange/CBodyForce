@@ -10,7 +10,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<BodyForceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<User, Role>()
-                    .AddEntityFrameworkStores<BodyForceDbContext>();
+                    .AddEntityFrameworkStores<BodyForceDbContext>().AddDefaultTokenProviders();
+
+
+#region Services & Repositaries
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped<IUserService, UserService>();
+#endregion
+
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 
@@ -26,8 +36,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=SignUp}/{id?}");
+    pattern: "{controller=Account}/{action=LogIn}/{id?}"); // Set Account/SignUp as the default route
+
+
 
 app.Run();

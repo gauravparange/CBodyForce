@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="~/BodyForce.Web.styles.css" asp-append-version="true" />
 </head>
 <body>
+    <partial name="_Header" />
 
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+    <partial name="_Footer" />
 
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

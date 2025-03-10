@@ -1,4 +1,4 @@
-namespace BodyForce.Web.Models
+namespace BodyForce
 {
     public class ErrorViewModel
     {
