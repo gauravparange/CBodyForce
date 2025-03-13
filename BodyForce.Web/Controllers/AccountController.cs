@@ -52,11 +52,11 @@ namespace BodyForce.Web.Controllers
                 }
                 else if(result.IsNotAllowed)
                 {
-                    ModelState.AddModelError(string.Empty, "logIn Not Allowed");
+                    ModelState.AddModelError(string.Empty, "LogIn Not Allowed");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid Credentials");
+                    ModelState.AddModelError(string.Empty, "Member not found or Invalid Credentials");
                 }
             }
             return View(loginDto);

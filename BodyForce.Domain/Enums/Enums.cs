@@ -8,7 +8,7 @@ namespace BodyForce
 {
    public enum Roles
     {
-        Member = 4,
-        Admin = 5
+        Admin = 1,
+        Member = 2
     }
 }

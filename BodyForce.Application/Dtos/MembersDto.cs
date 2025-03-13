@@ -8,12 +8,13 @@ namespace BodyForce
 {
     public class MembersDto 
     {
-        public string MemberId { get; set; }
+        public int MemberId { get; set; }
         public string Name { get; set; }
-        public string PhoneNo { get; set; }
+        public string? PhoneNo { get; set; }
         public DateTime DOJ { get; set; }
-        public Boolean MembershipStatus { get; set; }
-        public string MembershipEndDate { get; set; }
+        public string? MembershipStatus { get; set; }
+        public DateTime? MembershipStartDate { get; set; }
+        public DateTime? MembershipEndDate { get; set; }
 
     }
 }

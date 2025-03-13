@@ -12,11 +12,31 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+body, html {
+    height: 100%; /* Ensures the body takes up full height */
+    margin: 0; /* Remove default margin */
+}
+/* Ensure the page uses the full height */
+html, body {
+    height: 100%;
+    margin: 0;
 }
 
+/* Make sure content area takes the remaining space */
 body {
-  margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content area should take up space */
+.container {
+    flex-grow: 1;
+}
+
+/* Footer styles */
+footer {
+    margin-top: auto; /* Push the footer to the bottom */
+    background-color: #f8f9fa; /* Optional: footer background color */
+    padding: 10px 0; /* Footer padding */
+    text-align: center;
 }

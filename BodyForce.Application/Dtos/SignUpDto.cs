@@ -25,7 +25,7 @@ namespace BodyForce
         public int RoleId { get; set; }
         [Required(ErrorMessage = "Please enter your current address")]
         [Display(Name = "Address")]
-        [MinLength(10)]
+        [MinLength(5,ErrorMessage = "Address cannot be less than 10 characters")]
 
         public string? Address { get; set; }
 
