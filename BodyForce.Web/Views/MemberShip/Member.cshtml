@@ -1,39 +1,49 @@
 ﻿@model IEnumerable<MembersDto>
 @{
-    int srNo = 0;
+    int srNo = 1; // Start from 1 instead of 0
 }
- <table class="table table-dark table-hover">
-        <thead>
-            <tr>
-                <th>Sr No.</th> 
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Joining Date</th>
-                <th>Status</th>
-                <th>End Date</th>
-            </tr> 
-        </thead>
-        <tbody>
-            @if(Model.Count() != 0)
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th>Sr No.</th>
+            <th>Name</th>
+            <th>Member Code</th>
+            <th>Phone Number</th>
+            <th>Joining Date</th>
+            <th>Status</th>
+            <th>End Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            @foreach (var member in Model)
             {
-                @foreach (var member in Model)
-                {
-                    <tr>
-                        <td>@srNo + 1</td>
-                        <td>@member.Name</td>
-                        <td>@member.PhoneNo</td>
-                        <td>@member.DOJ</td>
-                        <td>@member.MembershipStatus</td>
-                        <td>@member.MembershipEndDate</td>
-                    </tr>
-                }
+                <tr>
+                    <td>@srNo</td>
+                    <td>@member.Name</td>
+                    <td>@member.MemberCode</td>
+                    <td>@member.PhoneNo</td>
+                    <td>@member.DOJ</td>
+                    <td>@member.MembershipStatus</td>
+                    <td>@member.MembershipEndDate</td>
+                    <td>
+                        <div class="d-flex justify-content-around  w-100">
+                            <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditMember" asp-controller="MemberShip" asp-route-UserId="@member.UserId"></a>
+                            <a class="bi bi-trash text-danger fs-6" asp-action="DeleteMember" asp-controller="MemberShip"></a>
+                        </div>
+                      
+                    </td>
+                </tr>
+                { srNo++; } // Increment the serial number after each row
             }
-            else
-            {
+        }
+        else
+        {
             <tr>
                 <td colspan="6">No Records Found</td>
             </tr>
-            }
-           
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>

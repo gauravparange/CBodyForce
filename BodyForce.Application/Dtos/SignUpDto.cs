@@ -30,9 +30,12 @@ namespace BodyForce
         public string? Address { get; set; }
 
         [Display(Name = "Height")]
-        public int? Height { get; set; }
+        public string? Height { get; set; }
 
         [Display(Name = "Weight")]
-        public int? Weight { get; set; }
+        public string? Weight { get; set; }
+
+        [Display(Name = "Member Code")]
+        public string? Username { get; set; }
     }
 }

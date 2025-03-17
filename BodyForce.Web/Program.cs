@@ -18,6 +18,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMemberShipService, MemberShipService>();
 #endregion
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();

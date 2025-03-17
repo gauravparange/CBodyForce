@@ -9,7 +9,9 @@ namespace BodyForce
     public class MembersDto 
     {
         public int MemberId { get; set; }
-        public string Name { get; set; }
+        public int UserId { get; set; }
+        public string? Name { get; set; }
+        public string? MemberCode { get; set; }
         public string? PhoneNo { get; set; }
         public DateTime DOJ { get; set; }
         public string? MembershipStatus { get; set; }

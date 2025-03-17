@@ -8,7 +8,7 @@ namespace BodyForce
     {
         [Key]
         public int MemberShipId { get; set; }
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public Boolean Status { get; set; }

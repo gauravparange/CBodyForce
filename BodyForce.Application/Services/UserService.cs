@@ -38,8 +38,8 @@ namespace BodyForce
                 PhoneNumber = signUpDto.PhoneNo,
                 ParentPhoneNo = signUpDto.ParentPhoneNo,
                 Address = signUpDto.Address,
-                Weight = signUpDto?.Weight.ToString(),
-                Height = signUpDto?.Height.ToString(),
+                Weight = signUpDto?.Weight,
+                Height = signUpDto?.Height,
                 CreatedOn = DateTime.Now
             };
             string password = user.FirstName + "@" + user.DOB.Year.ToString();
@@ -63,6 +63,10 @@ namespace BodyForce
 
             var result = await _signInManager.PasswordSignInAsync(user, logInDto.Password, false, false);
             return result;
+        }
+        public async Task<IdentityResult> UpdateUserAsync(User user)
+        {
+            return await _userManager.UpdateAsync(user);
         }
     }
 }
