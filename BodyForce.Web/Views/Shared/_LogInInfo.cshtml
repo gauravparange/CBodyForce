@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> _signInManager
+@{
+}
+<div class="d-flex">
+    @if (_signInManager.IsSignedIn(User))
+    {
+        <div class="nav-item me-2">
+            <a class="btn btn-primary" asp-action="LogOut" asp-controller="Account">Log Out</a>
+        </div>
+       
+    }
+    else
+    {
+        <div class="nav-item me-2">
+            <a class="btn btn-primary" asp-action="LogIn" asp-controller="Account">Log In</a>
+        </div>
+        <div class="nav-item">
+            <a class="btn btn-secondary" asp-action="SignUp" asp-controller="Account">Sign Up</a>
+        </div>
+    }
+</div>

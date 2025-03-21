@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace BodyForce
@@ -13,24 +15,20 @@ namespace BodyForce
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<Role> _roleManager;
-
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+        private readonly IUnitOfWork _unitOfWork;
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _unitOfWork = unitOfWork;
         }
         public async Task<IdentityResult> SignUpUserAsync(SignUpDto signUpDto)
         {
-            string maxUserId = "0001";
-            var allusers = _userManager.Users.ToList();
-            if (allusers.Any())
-            {
-                maxUserId =  (Convert.ToInt32(maxUserId) + allusers.Max(x => x.Id)).ToString();
-            }
+
             var user = new User()
             {
-                UserName = "BF" + maxUserId,
+                UserName = GetMemberCode(),
                 FirstName = signUpDto.FirstName,
                 LastName = signUpDto.LastName,
                 Email = signUpDto.Email,
@@ -47,11 +45,20 @@ namespace BodyForce
 
             if (result.Succeeded)
             {
-                var role = await _roleManager.FindByIdAsync(1.ToString());
+                var role = await _roleManager.FindByIdAsync(signUpDto.RoleId.ToString());
                 if (role != null)
                 {
                     await _userManager.AddToRoleAsync(user, role.Name);
                 }
+                var userID = await _userManager.FindByEmailAsync(user.Email);
+                var member  = new MemberShip()
+                {
+                    MemberShipId = 0,
+                    UserId = userID.Id,
+                    Status = false
+                };
+                var _result = await _unitOfWork.Repository<MemberShip>().AddAsync(member);
+                await _unitOfWork.Repository<MemberShip>().SaveChangesAsync();
             }
             return result;
         }
@@ -64,9 +71,23 @@ namespace BodyForce
             var result = await _signInManager.PasswordSignInAsync(user, logInDto.Password, false, false);
             return result;
         }
+        public async Task<User> IsEmailAvailableAsync(string Email)
+        {
+            return await _userManager.FindByEmailAsync(Email);
+        }
+        public async void LogOut()
+        {
+             await _signInManager.SignOutAsync();
+        }
+
+
         public async Task<IdentityResult> UpdateUserAsync(User user)
         {
             return await _userManager.UpdateAsync(user);
+        }
+        private string GetMemberCode()
+        {
+            return "BF" + (_userManager.Users.ToList().Any() ? _userManager.Users.ToList().Max(x => x.Id) + 1 : 1).ToString().PadLeft(4, '0');
         }
     }
 }

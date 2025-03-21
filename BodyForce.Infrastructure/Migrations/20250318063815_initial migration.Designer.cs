@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BodyForce.Infrastructure.Migrations
 {
     [DbContext(typeof(BodyForceDbContext))]
-    [Migration("20250308070716_initial-migration")]
+    [Migration("20250318063815_initial migration")]
     partial class initialmigration
     {
         /// <inheritdoc />
@@ -60,9 +60,8 @@ namespace BodyForce.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("MemberShipId");
 

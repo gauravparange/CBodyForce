@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace BodyForce
 {
@@ -11,7 +12,7 @@ namespace BodyForce
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [Required(ErrorMessage = "Please enter your email address")]
-        [Display(Name = "Email address")]
+        [Remote(action: "IsEmailAvailable", controller: "Account", ErrorMessage = "Email is already in use.")]
         public string Email { get; set; }
         [Required(ErrorMessage ="Please enter your phone number")]
         [DataType(DataType.PhoneNumber)]
@@ -22,6 +23,7 @@ namespace BodyForce
         [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
+        [Display(Name ="Role")]
         public int RoleId { get; set; }
         [Required(ErrorMessage = "Please enter your current address")]
         [Display(Name = "Address")]

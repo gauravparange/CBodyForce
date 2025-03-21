@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BodyForce.Web.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
@@ -10,11 +13,15 @@ namespace BodyForce.Web.Controllers
         {
             _userService = userService;
         }
+        [AllowAnonymous]
 
-        public IActionResult SignUp()
+        public IActionResult SignUp(bool SignUp = true)
         {
-            return View();
+            ViewBag.SignUp = SignUp;
+            return View(new SignUpDto());
         }
+        [AllowAnonymous]
+
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpDto signUpDto)
         {
@@ -33,14 +40,17 @@ namespace BodyForce.Web.Controllers
                     }
                 }
             }
+            ViewBag.SignUp = true;
             return View(signUpDto);
         }
-        
+        [AllowAnonymous]
         public async Task<IActionResult> LogIn()
         {
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
+
         public async Task<IActionResult> LogIn(LogInDto loginDto)
         {
             if (ModelState.IsValid)
@@ -56,11 +66,35 @@ namespace BodyForce.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Member not found or Invalid Credentials");
+                    ModelState.AddModelError(string.Empty, "Invalid User Name or Password");
                 }
             }
             return View(loginDto);
         }
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> IsEmailAvailable(string Email)
+        {
+            //Check If the Email Id is Already in the Database
+            var user = await _userService.IsEmailAvailableAsync(Email);
+            if (user == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Email {Email} is already in use.");
+            }
+        }
 
+        public async Task<IActionResult> LogOut()
+        {
+            _userService.LogOut();
+            return RedirectToAction("LogIn","Account");
+        }
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
+        }
     }
 }

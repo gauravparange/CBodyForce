@@ -27,7 +27,7 @@ namespace BodyForce
                              MemberCode = u.UserName,
                              PhoneNo = u.PhoneNumber,
                              DOJ = u.DOJ,
-                             MembershipStatus = m.Status == true ? "Active" : "Inactive",
+                             MembershipStatus = m.Status == true ? "Active" : "Not Active",
                              MembershipStartDate = m.StartDate,
                              MembershipEndDate = m.EndDate,
                              UserId = m.UserId,
@@ -54,6 +54,21 @@ namespace BodyForce
                          }).FirstOrDefault();
             return result;
         }
-        
+        //public async Task <MemberShip> ViewMemberShip()
+        //{
+
+        //}
+        //public async Task<IActionResult> AddMember(SignUpDto signUpDto)
+        //{
+            
+        //}
+        public class MemberShipDto
+        {
+            public int MemberShipId { get; set; }
+            public int SubscriptionType { get; set; }
+            public int UserId { get; set; }
+            public DateTime? StartDate { get; set; }
+            public DateTime? EndDate { get; set; }
+        }
     }
 }

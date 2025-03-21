@@ -1,49 +1,56 @@
-﻿@model IEnumerable<MembersDto>
+﻿
+@model IEnumerable<MembersDto>
+
 @{
     int srNo = 1; // Start from 1 instead of 0
 }
-<table class="table table-dark table-hover">
-    <thead>
-        <tr>
-            <th>Sr No.</th>
-            <th>Name</th>
-            <th>Member Code</th>
-            <th>Phone Number</th>
-            <th>Joining Date</th>
-            <th>Status</th>
-            <th>End Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Any())
-        {
-            @foreach (var member in Model)
-            {
+<div class="card">
+    <div class="card-body">
+        <a class="btn btn-primary" asp-action="AddMember" asp-asp-controller="MemberShip">Add Member</a>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@srNo</td>
-                    <td>@member.Name</td>
-                    <td>@member.MemberCode</td>
-                    <td>@member.PhoneNo</td>
-                    <td>@member.DOJ</td>
-                    <td>@member.MembershipStatus</td>
-                    <td>@member.MembershipEndDate</td>
-                    <td>
-                        <div class="d-flex justify-content-around  w-100">
-                            <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditMember" asp-controller="MemberShip" asp-route-UserId="@member.UserId"></a>
-                            <a class="bi bi-trash text-danger fs-6" asp-action="DeleteMember" asp-controller="MemberShip"></a>
-                        </div>
-                      
-                    </td>
+                    <th>Sr No.</th>
+                    <th>Name</th>
+                    <th>Member Code</th>
+                    <th>Phone Number</th>
+                    <th>Joining Date</th>
+                    <th>Status</th>
+                    <th>Membership</th>
+                    <th>Actions</th>
                 </tr>
-                { srNo++; } // Increment the serial number after each row
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="6">No Records Found</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var member in Model)
+                    {
+                        <tr>
+                            <td>@srNo</td>
+                            <td>@member.Name</td>   
+                            <td>@member.MemberCode</td>
+                            <td>@member.PhoneNo</td>
+                            <td>@member.DOJ</td>
+                            <td>@member.MembershipStatus</td>
+                            <td><a class="btn btn-outline-primary btn-sm" asp-action="ViewMembership" asp-controller="MemberShip">View Membership</a></td>
+                            <td>
+                                <div class="d-flex justify-content-around  w-100">
+                                    <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditMember" asp-controller="MemberShip" asp-route-UserId="@member.UserId"></a>
+                                    <a class="bi bi-trash text-danger fs-6" asp-action="DeleteMember" asp-controller="MemberShip"></a>
+                                </div>
+
+                            </td>
+                        </tr>
+                        { srNo++; } // Increment the serial number after each row
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
