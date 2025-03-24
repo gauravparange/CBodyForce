@@ -24,6 +24,7 @@ namespace BodyForce
 
         public DbSet<MemberShip> MemberShip { get; set; }
         public DbSet<Payment> Payment { get; set; }
+        public DbSet<SubscriptionType> SubscriptionType { get; set; }
         //public DbSet<Attendance> Attendance { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {

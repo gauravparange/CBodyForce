@@ -1,0 +1,76 @@
+﻿@model SubscriptionDto
+@{
+    ViewData["Title"] = "AddSubscriptionType";
+    string Action = Model.SubscriptionTypeId == 0 ? "AddSubscriptionType" : "EditSubscriptionType";
+    string ButtonName = Model.SubscriptionTypeId == 0 ? "Add" : "Edit";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header text-center text-uppercase">Add Subscription Type</div>
+        <div class="card-body">
+            <form asp-action="@Action">
+                <input asp-for="SubscriptionTypeId" hidden />
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label asp-for="Description" class="form-label"></label>
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="Price" class="form-label"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+
+                        <div class="form-group">
+                            <label asp-for="DurationInMonths" class="form-label"></label>
+                            <input asp-for="DurationInMonths" class="form-control" />
+                            <span asp-validation-for="DurationInMonths" class="text-danger"></span>
+                        </div>
+                    </div>  
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="DurationInDays" class="form-label"></label>
+                            <input asp-for="DurationInDays" class="form-control" />
+                            <span asp-validation-for="DurationInDays" class="text-danger"></span>
+                        </div>
+                    </div>  
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label asp-for="IsActive" class="form-label"></label>
+                            <select asp-for="IsActive" class="form-control">
+                                <option value="">Choose whether this type is active or not</option>
+                                <option value="@true">Active</option>
+                                <option value="@false">Not Active</option>
+                            </select>
+                        </div>
+                    </div>  
+                </div>
+                
+                
+               
+                    <div class="form-group  d-flex justify-content-center mt-3">
+                    <input type="submit" value="@ButtonName" class="btn btn-primary px-5" />
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+

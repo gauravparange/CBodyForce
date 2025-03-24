@@ -17,7 +17,7 @@ namespace BodyForce
         public string? Address { get; set; }
         public string? Height { get; set; }
         public string? Weight { get; set; }
-        public int CreatedBy { get; set; }
+        public int CreatedBy { get; set; } 
         public DateTime CreatedOn { get; set; }
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

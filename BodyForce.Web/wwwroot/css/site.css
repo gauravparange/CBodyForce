@@ -40,3 +40,26 @@ footer {
     padding: 10px 0; /* Footer padding */
     text-align: center;
 }
+.navbar-nav .dropdown-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .dropdown-toggle i {
+    font-size: 1.5rem;
+}
+
+.navbar-nav .dropdown-toggle span {
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 576px) {
+    .d-flex.flex-column.flex-sm-row a {
+        width: 100%;
+        text-align: center;
+    }
+}
+

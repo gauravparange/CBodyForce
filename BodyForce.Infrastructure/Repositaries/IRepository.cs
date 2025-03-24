@@ -8,6 +8,6 @@ namespace BodyForce
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(int id);
         Task SaveChangesAsync();
-        void Update(T entity);
+        Task<T> Update(T entity);
     }
 }

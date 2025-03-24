@@ -7,9 +7,11 @@ namespace BodyForce.Web.Controllers
     public class AdministrationController : Controller
     {
         private readonly IRoleService _roleService;
-        public AdministrationController(IRoleService roleService)
+        private readonly ISubscriptionService _subscriptionService;
+        public AdministrationController(IRoleService roleService, ISubscriptionService subscriptionService)
         {
             _roleService = roleService;
+            _subscriptionService = subscriptionService;
         }
         public async Task<IActionResult> Roles()
         {
@@ -67,6 +69,58 @@ namespace BodyForce.Web.Controllers
                 }
             }
             return View(roleDto);
+        }
+        public async Task<IActionResult> SubscriptionTypes()
+        {
+            var result = await _subscriptionService.GetAllSubscripitonAsync();
+            return View(result);
+        }
+        public async Task<IActionResult> AddSubscriptionType()
+        {
+            return View(new SubscriptionDto());
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddSubscriptionType(SubscriptionDto subscriptionDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _subscriptionService.AddSubscription(subscriptionDto);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("SubscriptionTypes", "Administration");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View();
+        }
+        public async Task<IActionResult> EditSubscriptionType(int subscriptionTypeId)
+        {
+            var result = await _subscriptionService.GetSubscripitonTypeAsyncVyId(subscriptionTypeId);
+            if(result != null)
+            {
+                return View("AddSubscriptionType",result);
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditSubscriptionType(SubscriptionDto subscriptionDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _subscriptionService.EditSubscription(subscriptionDto);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("SubscriptionTypes", "Administration");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(subscriptionDto);
         }
     }
 }

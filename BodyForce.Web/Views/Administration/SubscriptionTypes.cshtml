@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SubscriptionDto>
+@{
+    ViewData["Title"] = "SubscriptionTypes";
+    int srNo = 1;
+}
+
+
+<div class="card">
+    <div class="card-body">
+        <a class="btn btn-primary" asp-action="AddSubscriptionType" asp-controller="Administration">Add Subscription</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Durantion In Months</th>
+                    <th>Durantion In Days</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var sub in Model)
+                    {
+                        <tr>
+                            <td>@srNo</td>
+                            <td>@sub.Name</td>
+                            <td>@sub.Description</td>
+                            <td>@sub.DurationInMonths</td>
+                            <td>@sub.DurationInDays</td>
+                            <td>@sub.Status</td>
+                            <td>@sub.Price</td>
+                            <td>
+                                <div class="d-flex justify-content-around  w-100">
+                                    <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditSubscriptionType" asp-controller="Administration" asp-route-SubscriptionTypeId="@sub.SubscriptionTypeId"></a>
+                                    <a class="bi bi-trash text-danger fs-6" asp-action="DeleteSubscriptionType" asp-controller="Administration"></a>
+                                </div>
+
+                            </td>
+                        </tr>
+                        { srNo++; } // Increment the serial number after each row
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center">No Records Found</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

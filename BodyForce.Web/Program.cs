@@ -26,6 +26,9 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.Cookie.HttpOnly = true;  // Makes the cookie more secure by restricting access to JavaScript
     config.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // Onl
 });
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
 #region Services & Repositaries
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -33,12 +36,19 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMemberShipService, MemberShipService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<DataSeeder>();
 #endregion
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await dataSeeder.SeedRolesAndAdminAsync();
+}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

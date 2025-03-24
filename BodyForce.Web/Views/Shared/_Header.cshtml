@@ -1,52 +1,50 @@
 ﻿@inject SignInManager<User> _signInManager
-@{
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BodyForce</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    
-                        <ul class="navbar-nav flex-grow-1">
-                        @if (_signInManager.IsSignedIn(User))
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BodyForce</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto">
+                    @if (_signInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        @if (User.IsInRole("Administrator"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="MemberShip" asp-action="Member">Members</a>
-                                </li>
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="MemberShip" asp-action="Member">Members</a>
                             </li>
                         }
-                    </ul>
-                        <!-- Dropdown Menu -->
-                        @if (User.IsInRole("Administrator"))
-                        {                            
-                            <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Dashboard
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" type="button" asp-action="Roles" asp-controller="Administration">Roles</a></li>
-                                    <li><a class="dropdown-item" type="button">Subscription Type</a></li>
-                                    <li><a class="dropdown-item" type="button">Something else here</a></li>
-                                </ul>
-                            </div>
-                        }
-                    
-                    <!-- Log In / Sign Up Buttons -->
-                    <partial name="_LogInInfo" />
-                </div>  
-            </div>
-        </nav>
-    </header>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    }
+                </ul>
 
-}
+                <!-- Dashboard Dropdown for Admin -->
+                @if (User.IsInRole("Administrator"))
+                {
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dashboard
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" asp-action="Roles" asp-controller="Administration">Roles</a></li>
+                            <li><a class="dropdown-item" asp-action="SubscriptionTypes" asp-controller="Administration">Subscription Type</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </div>
+                }
+                <partial name="_LogInInfo" />
+                <!-- User Profile Dropdown -->
+                
+            </div>
+        </div>
+    </nav>
+</header>

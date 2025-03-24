@@ -34,9 +34,10 @@ namespace BodyForce
             return entity;
         }
 
-        public void Update(T entity)
+        public async Task<T> Update(T entity)
         {
             _dbSet.Update(entity);
+            return entity;
         }
 
         public void Delete(T entity)
