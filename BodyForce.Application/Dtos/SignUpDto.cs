@@ -19,10 +19,17 @@ namespace BodyForce
         [Display(Name = "Phone Number")]
         public string PhoneNo { get; set; }
         public string? ParentPhoneNo { get; set; }
+
+
+        [Required(ErrorMessage = "Please enter your Date Of Joining")]
+        [Display(Name = "Date of Joining")]
+        [DataType(DataType.Date)]
+        public DateTime DOJ { get; set; } = DateTime.Now;
+
         [Required(ErrorMessage = "Please enter your Date Of Birth")]
         [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
-        public DateTime DOB { get; set; }
+        public DateTime DOB { get; set; } = DateTime.Now.AddYears(-10);
         [Display(Name ="Role")]
         public int RoleId { get; set; }
         [Required(ErrorMessage = "Please enter your current address")]
@@ -38,6 +45,6 @@ namespace BodyForce
         public string? Weight { get; set; }
 
         [Display(Name = "Member Code")]
-        public string? Username { get; set; }
+        public string? UserName { get; set; }
     }
 }

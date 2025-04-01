@@ -25,15 +25,17 @@ namespace BodyForce
             ViewBag.ForMember = true;
             return RedirectToAction("SignUp","Account",new {SignUp = false});
         }
-        public async Task<IActionResult> ViewMembership(int MembershipId)
-        {
-
-            return View();
-        }
         public async Task<IActionResult> EditMember(int UserId)
-        {
-            
+        {            
             return View(await _memberShipService.GetMember(UserId));
+        }
+        public async Task<IActionResult> ViewMembership(int UserId)
+        {
+            return View(await _memberShipService.ViewMemberShip(UserId));
+        }
+        public async Task<IActionResult> AddMembership(int UserId)
+        {
+            return View();
         }
         //[HttpPost]
         //public async Task<IActionResult> EditMember(SignUpDto signUpDto)

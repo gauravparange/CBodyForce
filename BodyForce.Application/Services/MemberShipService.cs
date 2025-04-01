@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Metadata;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,11 @@ namespace BodyForce
     public class MemberShipService : IMemberShipService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public MemberShipService(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public MemberShipService(IUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public async Task<IEnumerable<MembersDto>> GetAllMembers()
         {
@@ -36,31 +39,33 @@ namespace BodyForce
         }
         public async Task<SignUpDto> GetMember(int UserId)
         {
-
-            var result = (from u in (await _unitOfWork.Repository<User>().GetAllAsync())                         
-                         where u.Id == UserId 
-                         select new SignUpDto
-                         {
-                             FirstName = u.FirstName,
-                             LastName = u.LastName,
-                             Email = u.Email,
-                             PhoneNo = u.PhoneNumber,
-                             ParentPhoneNo = u.ParentPhoneNo,
-                             DOB = u.DOB,
-                             Address = u.Address,
-                             Height = u.Height,
-                             Weight = u.Weight,
-                             Username = u.UserName
-                         }).FirstOrDefault();
+            var user = await _unitOfWork.Repository<User>().GetAllAsync();
+            var result = _mapper.Map<SignUpDto>(user.FirstOrDefault(x => x.Id == UserId));
+            
             return result;
         }
-        //public async Task <MemberShip> ViewMemberShip()
+        public async Task<List<ViewMembershipDto>> ViewMemberShip(int UserId)
+        {
+            var result = (from m in (await _unitOfWork.Repository<MemberShip>().GetAllAsync())
+                         join p in (await _unitOfWork.Repository<Payment>().GetAllAsync()) on m.MemberShipId equals p.MemberShipId
+                         join s in (await _unitOfWork.Repository<SubscriptionType>().GetAllAsync()) on m.SubscriptionTypeId equals s.SubscriptionTypeId
+                         where m.UserId == UserId
+                         select new ViewMembershipDto
+                         {
+                             MemberShipId = m.MemberShipId,
+                             UserId = m.UserId,
+                             StartDate = m.StartDate,
+                             EndDate = m.EndDate,
+                             RenewalDate = m.RenewalDate,
+                             SubscriptionTypeId = m.SubscriptionTypeId,
+                             SubscriptionName = s.Name
+                         }).ToList();
+            return result;
+
+        }
+        //public async Task<IActionResult> GetMember(SignUpDto signUpDto)
         //{
 
-        //}
-        //public async Task<IActionResult> AddMember(SignUpDto signUpDto)
-        //{
-            
         //}
         public class MemberShipDto
         {

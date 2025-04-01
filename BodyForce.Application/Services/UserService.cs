@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Metadata;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
@@ -16,30 +17,33 @@ namespace BodyForce
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IUnitOfWork _unitOfWork;
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager, IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public async Task<IdentityResult> SignUpUserAsync(SignUpDto signUpDto)
         {
 
-            var user = new User()
-            {
-                UserName = GetMemberCode(),
-                FirstName = signUpDto.FirstName,
-                LastName = signUpDto.LastName,
-                Email = signUpDto.Email,
-                DOB = signUpDto.DOB,
-                PhoneNumber = signUpDto.PhoneNo,
-                ParentPhoneNo = signUpDto.ParentPhoneNo,
-                Address = signUpDto.Address,
-                Weight = signUpDto?.Weight,
-                Height = signUpDto?.Height,
-                CreatedOn = DateTime.Now
-            };
+            var user = _mapper.Map<User>(signUpDto);
+            user.UserName = GetMemberCode();
+            //{
+            //    UserName = GetMemberCode(),
+            //    FirstName = signUpDto.FirstName,
+            //    LastName = signUpDto.LastName,
+            //    Email = signUpDto.Email,
+            //    DOB = signUpDto.DOB,
+            //    PhoneNumber = signUpDto.PhoneNo,
+            //    ParentPhoneNo = signUpDto.ParentPhoneNo,
+            //    Address = signUpDto.Address,
+            //    Weight = signUpDto?.Weight,
+            //    Height = signUpDto?.Height,
+            //    CreatedOn = DateTime.Now
+            //};
             string password = user.FirstName + "@" + user.DOB.Year.ToString();
             var result = await _userManager.CreateAsync(user, password);
 

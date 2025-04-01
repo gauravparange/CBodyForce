@@ -30,9 +30,9 @@
                             <td>@member.Name</td>   
                             <td>@member.MemberCode</td>
                             <td>@member.PhoneNo</td>
-                            <td>@member.DOJ</td>
+                            <td>@member.DOJ.ToString("dd-MM-yyyy")</td>
                             <td>@member.MembershipStatus</td>
-                            <td><a class="btn btn-outline-primary btn-sm" asp-action="ViewMembership" asp-controller="MemberShip">View Membership</a></td>
+                            <td><a class="btn btn-outline-primary btn-sm" asp-action="ViewMembership" asp-controller="MemberShip" asp-route-UserId="@member.UserId">View Membership</a></td>
                             <td>
                                 <div class="d-flex justify-content-around  w-100">
                                     <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditMember" asp-controller="MemberShip" asp-route-UserId="@member.UserId"></a>
