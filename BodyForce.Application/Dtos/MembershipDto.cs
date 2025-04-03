@@ -10,18 +10,26 @@ namespace BodyForce
 {
     public class MembershipDto
     {
-        public int Id { get; set; }
+        public int UserId { get; set; } 
+        public int MemberShipId { get; set; }
         [Required(ErrorMessage ="Please select the type of subscription")]
         [Display(Name ="Subscripiton Type")]
         public int SubscriptionTypeId { get; set; }
-        [Required(ErrorMessage = "Enter the amount paid by the member")]
+
+        [Display(Name = "Start Date")]
+        [Required(ErrorMessage = "Please select the start date")]
+        [DataType(DataType.Date)]
+        public DateTime? StartDate { get; set; }
+
+        [PaymentValidation("Enter the amount paid by the member")]
         [Display(Name = "Amount Paid")]
         [DataType(DataType.Currency)]
-        public double AmountPaid { get; set; }
+        public double? AmountPaid { get; set; }
+
         [Display(Name = "Payment Date")]
-        [Required(ErrorMessage = "Please select the payment date")]
         [DataType(DataType.Date)]
-        public DateTime PaymentDate { get; set; }
+        [PaymentValidation("Please select the payment date")]
+        public DateTime? PaymentDate { get; set; }
         [Display(Name = "Mode of Payment")]
         [Required(ErrorMessage = "Please select the payment mode")]
         public string PaymentMethod  { get; set; }

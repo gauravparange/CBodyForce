@@ -8,7 +8,7 @@
 
 <div class="card">
     <div class="card-body">
-        <a class="btn btn-primary" asp-action="AddMembership" asp-controller="MemberShip">Add Membership</a>
+        <a class="btn btn-primary" asp-action="AddMembership" asp-controller="MemberShip" asp-route-UserId="@ViewBag.UserId">Add Membership</a>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -35,7 +35,7 @@
                             <td>@member.Payment</td>                            
                             <td>
                                 <div class="d-flex justify-content-around  w-100">
-                                    <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditMembership" asp-controller="MemberShip" asp-route-UserId="@member.UserId"></a>
+                                    <a class="bi bi-pencil-square  text-primary fs-6" asp-action="AddMembership" asp-controller="MemberShip" asp-route-UserId="@ViewBag.UserId"></a>
                                     <a class="bi bi-trash text-danger fs-6" asp-action="DeleteMembership" asp-controller="MemberShip"></a>
                                 </div>
                             </td>

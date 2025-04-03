@@ -122,5 +122,9 @@ namespace BodyForce.Web.Controllers
             }
             return View(subscriptionDto);
         }
+        public async Task<IActionResult> DeleteSubscription(int Id)
+        {
+
+        }
     }
 }

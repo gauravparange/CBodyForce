@@ -30,6 +30,7 @@ namespace BodyForce
         {
 
             var user = _mapper.Map<User>(signUpDto);
+            user.CreatedOn = DateTime.Now;
             user.UserName = GetMemberCode();
             //{
             //    UserName = GetMemberCode(),

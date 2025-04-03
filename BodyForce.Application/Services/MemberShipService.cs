@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -58,22 +59,76 @@ namespace BodyForce
                              EndDate = m.EndDate,
                              RenewalDate = m.RenewalDate,
                              SubscriptionTypeId = m.SubscriptionTypeId,
-                             SubscriptionName = s.Name
+                             SubscriptionName = s.Name,
+                             Payment = p.PaymentMethod
                          }).ToList();
             return result;
 
         }
-        //public async Task<IActionResult> GetMember(SignUpDto signUpDto)
-        //{
-
-        //}
-        public class MemberShipDto
+        public async Task<MembershipDto> GetMemberShip(int userId)
         {
-            public int MemberShipId { get; set; }
-            public int SubscriptionType { get; set; }
-            public int UserId { get; set; }
-            public DateTime? StartDate { get; set; }
-            public DateTime? EndDate { get; set; }
+            var membership = (await _unitOfWork.Repository<MemberShip>().GetByConditionAsync(x => x.UserId == userId)).LastOrDefault();
+            var result = _mapper.Map<MembershipDto>(membership);
+            if (membership != null && membership.SubscriptionTypeId != 0)
+            {
+                var payment = (await _unitOfWork.Repository<Payment>().GetByConditionAsync(x => x.UserId == userId && x.MemberShipId == membership.MemberShipId)).FirstOrDefault();
+                result.PaymentDate = payment.PaymentDate;
+                result.PaymentMethod = payment.PaymentMethod;
+                result.AmountPaid = payment.AmountPaid;
+                result.Notes = payment.Notes;
+            }
+            return result;
         }
+        public async Task<IdentityResult> AddMemberShip(MembershipDto membershipDto)
+        {
+            try
+            {               
+                var subscriptionType = await _unitOfWork.Repository<SubscriptionType>().GetByIdAsync(membershipDto.SubscriptionTypeId);
+
+                var membership = new MemberShip()
+                {
+                    MemberShipId= membershipDto.MemberShipId,
+                    UserId = membershipDto.UserId,
+                    SubscriptionTypeId = membershipDto.SubscriptionTypeId,
+                    StartDate = membershipDto.StartDate,
+                    EndDate = membershipDto.StartDate?.AddDays(subscriptionType.DurationInDays),
+                    Status = true,
+                    RenewalDate = (membershipDto.StartDate?.AddDays(subscriptionType.DurationInDays))?.AddDays(1)
+                };           
+
+                if (membershipDto.MemberShipId != 0)
+                {
+                    membership.UpdatedOn = DateTime.Now;
+                    membership = await _unitOfWork.Repository<MemberShip>().Update(membership);
+                }
+                else
+                {
+                    membership.CreatedOn = DateTime.Now;
+                    membership = await _unitOfWork.Repository<MemberShip>().AddAsync(membership);
+                }
+                await  _unitOfWork.Repository<MemberShip>().SaveChangesAsync();
+
+                var payment = await _unitOfWork.Repository<Payment>().AddAsync(new Payment()
+                {
+                    MemberShipId = membershipDto.MemberShipId,
+                    UserId = membershipDto.UserId,
+                    AmountPaid = membershipDto.AmountPaid ?? 0,
+                    PaymentDate = membershipDto.PaymentDate ?? DateTime.MinValue,
+                    PaymentMethod = membershipDto.PaymentMethod,
+                    Notes = membershipDto.Notes ?? string.Empty,
+                    CreatedOn = DateTime.Now,
+                });
+
+                await _unitOfWork.Repository<Payment>().SaveChangesAsync();
+                return IdentityResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = ex.Message.ToString()
+                });
+            }
+        }        
     }
 }

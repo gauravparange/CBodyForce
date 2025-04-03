@@ -17,54 +17,71 @@
                 <div class="card-body">
                     <form asp-action="AddMembership">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="row">
+
+                        <input asp-for="MemberShipId" hidden />
+                        <input asp-for="UserId" hidden />
+                        <div class="row  justify-content-center">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="SubscriptionTypeId" class="form-label"></label>
                                     <select asp-for="SubscriptionTypeId" asp-items="@subscriptionOptions" class="form-control">
-                                        <option value="">-- Select a subscription type --</option>
+                                        <option class="text-center" value="">-- Select a subscription type --</option>
                                     </select>
                                     <span asp-validation-for="SubscriptionTypeId" class="text-danger"></span>
 
                                 </div>
                             </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label asp-for="StartDate" class="form-label"></label>
+                                    <input asp-for="StartDate" class="form-control" />
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+                            </div>                            
+
+                        </div>
+                        <div class="row  justify-content-center">
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="PaymentMethod" class="form-label"></label>
+                                    <select asp-for="PaymentMethod" class="form-control">
+                                        <option class="text-center" value="">-- Select a mode of payment --</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="UPI">UPI</option>
+                                        <option value="Other">Other</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                    <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
                                 <div class="form-group">
                                     <label asp-for="AmountPaid" class="form-label"></label>
                                     <input asp-for="AmountPaid" class="form-control" />
                                     <span asp-validation-for="AmountPaid" class="text-danger"></span>
                                 </div>
                             </div>
-                            
-
+                           
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
+
+                        <div class="row   justify-content-center">
+
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label asp-for="PaymentDate" class="form-label"></label>
                                     <input asp-for="PaymentDate" class="form-control" />
                                     <span asp-validation-for="PaymentDate" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <div class="form-group">
-                                    <label asp-for="PaymentMethod" class="form-label"></label>
-                                    <label asp-for="PaymentMethod" class="form-label"></label>
-                                    <select asp-for="PaymentMethod"  class="form-control">
-                                        <option value="">-- Select a mode of payment --</option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="UPI">UPI</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                    <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                                    <label asp-for="Notes" class="form-label"></label>
+                                    <input asp-for="Notes" class="form-control" />
+                                    <span asp-validation-for="Notes" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Notes" class="form-label"></label>
-                            <input  asp-for="Notes" class="form-control" />
-                            <span asp-validation-for="PaymentDate" class="text-danger"></span>
-                        </div>
+                        
 
                         <div class="form-group d-flex justify-content-center mt-4">
                             <input type="submit" value="Add" class="btn btn-primary px-4" />

@@ -59,5 +59,21 @@ namespace BodyForce
                 });
             }            
         }
+        public async Task<IdentityResult> DeleteSubscription(int Id)
+        {
+            try
+            {
+                var result = await  _unitOfWork.Repository<SubscriptionType>().GetByIdAsync(Id);
+                await _unitOfWork.Repository<SubscriptionType>().SaveChangesAsync();
+                return IdentityResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = ex.Message.ToString()
+                });
+            }            
+        }
     }
 }
