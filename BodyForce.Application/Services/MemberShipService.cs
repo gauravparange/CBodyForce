@@ -22,8 +22,8 @@ namespace BodyForce
         public async Task<IEnumerable<MembersDto>> GetAllMembers()
         {
 
-            var result = from u in (await _unitOfWork.Repository<User>().GetAllAsync())
-                         join m in (await _unitOfWork.Repository<MemberShip>().GetAllAsync()) on u.Id equals m.UserId
+            var result = from u in (await _unitOfWork.Repository<User>().GetByConditionAsync(x => x.IsDeleted == false))
+                         join m in (await _unitOfWork.Repository<MemberShip>().GetByConditionAsync(x => x.IsDeleted == false)) on u.Id equals m.UserId
                          select new MembersDto
                          {
                              MemberId = m.MemberShipId,
@@ -40,16 +40,16 @@ namespace BodyForce
         }
         public async Task<SignUpDto> GetMember(int UserId)
         {
-            var user = await _unitOfWork.Repository<User>().GetAllAsync();
+            var user = await _unitOfWork.Repository<User>().GetByConditionAsync(x => x.IsDeleted == false);
             var result = _mapper.Map<SignUpDto>(user.FirstOrDefault(x => x.Id == UserId));
             
             return result;
         }
         public async Task<List<ViewMembershipDto>> ViewMemberShip(int UserId)
         {
-            var result = (from m in (await _unitOfWork.Repository<MemberShip>().GetAllAsync())
-                         join p in (await _unitOfWork.Repository<Payment>().GetAllAsync()) on m.MemberShipId equals p.MemberShipId
-                         join s in (await _unitOfWork.Repository<SubscriptionType>().GetAllAsync()) on m.SubscriptionTypeId equals s.SubscriptionTypeId
+            var result = (from m in (await _unitOfWork.Repository<MemberShip>().GetByConditionAsync(x => x.IsDeleted == false))
+                         join p in (await _unitOfWork.Repository<Payment>().GetByConditionAsync(x => x.IsDeleted == false)) on m.MemberShipId equals p.MemberShipId
+                         join s in (await _unitOfWork.Repository<SubscriptionType>().GetByConditionAsync(x => x.IsDeleted == false)) on m.SubscriptionTypeId equals s.SubscriptionTypeId
                          where m.UserId == UserId
                          select new ViewMembershipDto
                          {

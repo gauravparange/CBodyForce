@@ -42,6 +42,30 @@ namespace BodyForce
                 Name = roleDto.RoleName
             });
         }
+        public async Task<IdentityResult> DeleteRole(int Id)
+        {
+            try
+            {
+                var result = await _roleManager.FindByIdAsync(Id.ToString());
+                if (result != null)
+                {
+                    result.IsDeleted = true;
+                    await _roleManager.UpdateAsync(result);
+                    return IdentityResult.Success;
+                }
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Role not found."
+                });
+            }
+            catch (Exception ex)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = ex.Message.ToString()
+                });
+            }
+        }    
         public async Task<IEnumerable<Role>> GetAllRoles()
         {
             var allRoles = _roleManager.Roles.Where(x => x.IsDeleted == false);

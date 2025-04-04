@@ -62,4 +62,19 @@ footer {
         text-align: center;
     }
 }
+.small-alert {
+    font-size: 14px;
+    padding: 5px 10px;
+    max-width: 300px;
+    margin: auto;
+    position: relative; /* Make sure the alert container is the positioning context */
+}
+
+.small-alert .btn-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 0.25rem 0.5rem; /* Adjust padding if needed */
+    font-size: 12px; /* Optional: make the button smaller */
+}
 

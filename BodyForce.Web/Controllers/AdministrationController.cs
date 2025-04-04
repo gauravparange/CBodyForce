@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BodyForce.Web.Controllers
 {
@@ -70,6 +71,19 @@ namespace BodyForce.Web.Controllers
             }
             return View(roleDto);
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteRole(int Id)
+        {
+            var result = await _roleService.DeleteRole(Id);
+            if (result.Succeeded)
+            {
+                TempData["Success"] = "Role deleted successfully.";
+                return RedirectToAction("Roles", "Administration");
+            }
+            TempData["Error"] = string.Join("; ", result.Errors.Select(e => e.Description));
+            return RedirectToAction("Roles", "Administration");
+        }
+
         public async Task<IActionResult> SubscriptionTypes()
         {
             var result = await _subscriptionService.GetAllSubscripitonAsync();
@@ -122,9 +136,18 @@ namespace BodyForce.Web.Controllers
             }
             return View(subscriptionDto);
         }
+        [HttpPost]
         public async Task<IActionResult> DeleteSubscription(int Id)
         {
+             var result =  await _subscriptionService.DeleteSubscription(Id);
 
+            if (result.Succeeded)
+            {
+                TempData["Success"] = "Role deleted successfully.";
+                return RedirectToAction("SubscriptionTypes", "Administration");
+            }
+            TempData["Error"] = string.Join("; ", result.Errors.Select(e => e.Description));
+            return RedirectToAction("SubscriptionTypes", "Administration");           
         }
     }
 }

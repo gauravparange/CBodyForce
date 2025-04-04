@@ -5,72 +5,76 @@
     string ButtonName = Model.SubscriptionTypeId == 0 ? "Add" : "Edit";
 }
 
-<div class="container">
+<div class="container mt-4">
     <div class="card">
-        <div class="card-header text-center text-uppercase">Add Subscription Type</div>
+        <h4 class="card-header text-center text-uppercase bg-secondary text-white py-3">
+            Add Subscription Type
+        </h4>
         <div class="card-body">
             <form asp-action="@Action">
                 <input asp-for="SubscriptionTypeId" hidden />
 
-                <div class="row">
+                <!-- Name & Description Row -->
+                <div class="row g-3">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label asp-for="Name" class="form-label"></label>
+                            <label asp-for="Name" class="form-label">Name</label>
                             <input asp-for="Name" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-8">
                         <div class="form-group">
-                            <label asp-for="Description" class="form-label"></label>
+                            <label asp-for="Description" class="form-label">Description</label>
                             <input asp-for="Description" class="form-control" />
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+
+                <!-- Price, Duration, Status Row -->
+                <div class="row g-3 mt-2">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label asp-for="Price" class="form-label"></label>
+                            <label asp-for="Price" class="form-label">Price</label>
                             <input asp-for="Price" class="form-control" />
                             <span asp-validation-for="Price" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-3">
-
                         <div class="form-group">
-                            <label asp-for="DurationInMonths" class="form-label"></label>
+                            <label asp-for="DurationInMonths" class="form-label">Duration (Months)</label>
                             <input asp-for="DurationInMonths" class="form-control" />
                             <span asp-validation-for="DurationInMonths" class="text-danger"></span>
                         </div>
-                    </div>  
+                    </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label asp-for="DurationInDays" class="form-label"></label>
+                            <label asp-for="DurationInDays" class="form-label">Duration (Days)</label>
                             <input asp-for="DurationInDays" class="form-control" />
                             <span asp-validation-for="DurationInDays" class="text-danger"></span>
                         </div>
-                    </div>  
+                    </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label asp-for="IsActive" class="form-label"></label>
+                            <label asp-for="IsActive" class="form-label">Status</label>
                             <select asp-for="IsActive" class="form-control">
-                                <option value="">Choose whether this type is active or not</option>
-                                <option value="@true">Active</option>
-                                <option value="@false">Not Active</option>
+                                <option value="">Choose status</option>
+                                <option value="true">Active</option>
+                                <option value="false">Not Active</option>
                             </select>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
                         </div>
-                    </div>  
+                    </div>
                 </div>
-                
-                
-               
-                    <div class="form-group  d-flex justify-content-center mt-3">
+
+                <!-- Submit Button -->
+                <div class="form-group d-flex justify-content-center mt-4">
                     <input type="submit" value="@ButtonName" class="btn btn-primary px-5" />
                 </div>
             </form>
         </div>
-        </div>
     </div>
 </div>
+
 

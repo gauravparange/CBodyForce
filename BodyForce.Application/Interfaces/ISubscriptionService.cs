@@ -8,5 +8,6 @@ namespace BodyForce
         Task<SubscriptionDto> GetSubscripitonTypeAsyncVyId(int subscriptionTypeId);
         Task<IdentityResult> AddSubscription(SubscriptionDto subscriptionDto);
         Task<IdentityResult> EditSubscription(SubscriptionDto subscriptionDto);
+        Task<IdentityResult> DeleteSubscription(int Id);
     }
 }

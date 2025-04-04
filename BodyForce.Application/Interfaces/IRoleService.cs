@@ -15,5 +15,6 @@ namespace BodyForce
         Task<IdentityResult> EditRoleAsync(CreateRoleDto roleDto);
         Task<IEnumerable<Role>> GetAllRoles();
         Task<Role> GetRoleById(int RoleId);
+        Task<IdentityResult> DeleteRole(int Id);
     }
 }

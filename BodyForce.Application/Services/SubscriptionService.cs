@@ -19,7 +19,7 @@ namespace BodyForce
         }
         public async Task<IEnumerable<SubscriptionDto>> GetAllSubscripitonAsync()
         {
-            var result = await _unitOfWork.Repository<SubscriptionType>().GetAllAsync();
+            var result = await _unitOfWork.Repository<SubscriptionType>().GetByConditionAsync(x => x.IsDeleted == false);
             return _mapper.Map<IEnumerable<SubscriptionDto>>(result);
         }
         public async Task<SubscriptionDto> GetSubscripitonTypeAsyncVyId(int subscriptionTypeId)
@@ -64,8 +64,10 @@ namespace BodyForce
             try
             {
                 var result = await  _unitOfWork.Repository<SubscriptionType>().GetByIdAsync(Id);
+                result.IsDeleted = true;
                 await _unitOfWork.Repository<SubscriptionType>().SaveChangesAsync();
                 return IdentityResult.Success;
+
             }
             catch (Exception ex)
             {

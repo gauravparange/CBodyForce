@@ -2,7 +2,7 @@
 @inject IUnitOfWork _unitOfWork;
 @{
     ViewData["Title"] = "AddMembership";
-    var subscriptionOptions = (await _unitOfWork.Repository<SubscriptionType>().GetAllAsync()).Select(st =>
+    var subscriptionOptions = (await _unitOfWork.Repository<SubscriptionType>().GetByConditionAsync(x => x.IsDeleted == false)).Select(st =>
     new SelectListItem
     {
         Value = st.SubscriptionTypeId.ToString(),
@@ -10,10 +10,13 @@
     });
 }
 
-<div class="container mt-5">
+<div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card  shadow-sm">
+                <h4 class="card-header text-center text-primary">
+                    Add Membership
+                </h4>
                 <div class="card-body">
                     <form asp-action="AddMembership">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
