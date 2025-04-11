@@ -9,6 +9,27 @@
     {
       "library": "jquery-ajax-unobtrusive@3.2.6",
       "destination": "wwwroot/lib/jquery-ajax-unobtrusive/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "Chart.js@4.4.1",
+      "destination": "wwwroot/lib/Chart.js/",
+      "files": [
+        "chart.cjs.map",
+        "chart.js",
+        "chart.js.map",
+        "chart.min.js",
+        "chart.umd.js",
+        "chart.umd.js.map",
+        "chart.umd.min.js",
+        "helpers.cjs.map",
+        "helpers.js",
+        "helpers.js.map",
+        "helpers.min.js",
+        "index.d.ts",
+        "index.umd.d.ts",
+        "types.d.ts"
+      ]
     }
   ]
 }

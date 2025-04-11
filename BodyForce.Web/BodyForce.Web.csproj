@@ -33,9 +33,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Home\Shared\" />
     <Folder Include="wwwroot\lib\bootstrap\dist\css\" />
     <Folder Include="wwwroot\lib\bootstrap\dist\js\" />
     <Folder Include="wwwroot\lib\bootstrap\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Shared\_ViewAllModal.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Shared\_ViewAllModal.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\_ViewAllModal.cshtml" />
   </ItemGroup>
 
 </Project>

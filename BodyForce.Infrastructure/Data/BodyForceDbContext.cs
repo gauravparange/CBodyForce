@@ -25,7 +25,7 @@ namespace BodyForce
         public DbSet<MemberShip> MemberShip { get; set; }
         public DbSet<Payment> Payment { get; set; }
         public DbSet<SubscriptionType> SubscriptionType { get; set; }
-        //public DbSet<Attendance> Attendance { get; set; }
+        public DbSet<MembershipView> MembershipView { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -38,6 +38,8 @@ namespace BodyForce
             builder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins"); // AspNetUserLogins
             builder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims"); // AspNetRoleClaims
             builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens"); // AspNetUserTokens
+
+            builder.Entity<MembershipView>().ToView(nameof(MembershipView)).HasNoKey();
         }
     }
 }

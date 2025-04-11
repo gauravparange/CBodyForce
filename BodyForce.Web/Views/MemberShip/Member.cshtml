@@ -33,7 +33,7 @@
                                     <td>@member.MemberCode</td>
                                     <td>@member.PhoneNo</td>
                                     <td>@member.DOJ.ToString("dd-MM-yyyy")</td>
-                                    <td>@member.MembershipStatus</td>
+                                    <td> @(member.MembershipStatus == true? "Active" : "InActive" )</td>
                                     <td>
                                         <div class="d-flex justify-content-around flex-wrap gap-2">
                                             <a class="btn btn-outline-primary btn-sm" asp-action="ViewMembership" asp-controller="MemberShip" asp-route-UserId="@member.UserId">View Membership</a>

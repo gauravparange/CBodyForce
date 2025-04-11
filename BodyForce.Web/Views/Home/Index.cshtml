@@ -1,8 +1,117 @@
-﻿@{
+﻿@model DashboardViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<div class="container">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to BodyForce</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if (User.IsInRole("Administrator"))
+                {
+    <div class="row">
+        <!-- Active Memberships Card -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.ActiveMembershipsCount</h5>
+                    <p class="card-text">Active Memberships</p>
+                        <a href="#" class="btn btn-primary  btn-view-all" data-category="ActiveMemberships">View All</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subscription Renewals Card -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.SubscriptionRenewalCount</h5>
+                    <p class="card-text">Subscription Renewals</p>
+                        <a href="#" class="btn btn-primary  btn-view-all" data-category="SubscriptionRenewals">View All</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- You can add more cards here -->
+        <!-- Example: Pending Payments Card -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.PendingPaymentsCount</h5>
+                    <p class="card-text">Pending Payments</p>
+                        <a href="#" class="btn btn-primary btn-view-all" data-category="PendingPayments">View All</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example: Expiring Soon Memberships Card -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">3</h5>
+                    <p class="card-text">Expiring Soon</p>
+                        <a href="#" class="btn btn-primary btn-view-all" data-category="ActiveMemberships">View All</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
 </div>
+
+<partial name="_ViewAllModal" />
+   
+<!-- JavaScript -->
+
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.btn-view-all').click(function (e) {
+            e.preventDefault();
+
+            var category = $(this).data('category');
+
+            $.ajax({
+                url: '/Home/GetList',
+                type: 'GET',
+                data: { category: category },
+                success: function (response) {
+                    $('#list-container').html(response);
+                    $('#viewAllModal').modal('show'); // Show modal after content is loaded
+                },
+                error: function () {
+                    alert("An error occurred while loading the data.");
+                }
+            });
+        });
+    });
+</script>
+
+         <style>
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .card-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .card-text {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .btn-primary {
+            border-radius: 50px;
+        }
+        .container {
+            padding-top: 20px;
+        }
+        media (max-width: 768px) {
+            .col-md-2 {
+                margin-bottom: 20px;
+            }
+        }
+    </style>

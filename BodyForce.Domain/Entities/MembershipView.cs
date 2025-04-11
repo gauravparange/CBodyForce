@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BodyForce
 {
-    public class MembersDto 
+    public class MembershipView
     {
         public int MemberId { get; set; }
         public int UserId { get; set; }

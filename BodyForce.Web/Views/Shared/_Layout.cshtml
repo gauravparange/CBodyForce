@@ -20,13 +20,21 @@
     </div>
 
     <partial name="_Footer" />
- <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- Include jQuery first -->
+    <!-- jQuery (required for Bootstrap's JavaScript plugins) -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS (bundle includes Popper.js) -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Your custom JS files -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/deleteConfirmation.js"></script>
+
+    <!-- jQuery validation scripts (for form validation) -->
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/js/deleteConfirmation.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

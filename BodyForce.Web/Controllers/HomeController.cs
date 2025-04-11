@@ -3,22 +3,28 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
+
 namespace BodyForce.Web.Controllers
 {
     [Authorize]
-
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IDashboardService _dashboardservice;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IDashboardService dashboardservice)
         {
             _logger = logger;
+            _dashboardservice = dashboardservice;
         }
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View( await _dashboardservice.GetDashboardCount());
+        }
+        public async Task<IActionResult> GetList(string category)
+        {
+            var data = await _dashboardservice.GetList(category);
+            return PartialView("_MembershipList", data);
         }
 
         public IActionResult Privacy()

@@ -38,6 +38,10 @@ namespace BodyForce
             await _dbSet.AddAsync(entity);
             return entity;
         }
+        public async Task<int> CountAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _dbSet.CountAsync(expression);
+        }
 
         public async Task<T> Update(T entity)
         {

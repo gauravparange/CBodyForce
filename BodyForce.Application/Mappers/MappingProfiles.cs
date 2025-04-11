@@ -20,6 +20,9 @@ namespace BodyForce
 
             CreateMap<MembershipDto, MemberShip>();
             CreateMap<MemberShip, MembershipDto>();
+            
+            CreateMap<MembersDto, MembershipView>();
+            CreateMap<MembershipView, MembersDto>();
 
 
         }

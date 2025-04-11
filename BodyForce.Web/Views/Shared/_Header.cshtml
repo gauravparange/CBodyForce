@@ -15,15 +15,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (User.IsInRole("Administrator"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="MemberShip" asp-action="Member">Members</a>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                     }
                 </ul>
 
@@ -35,9 +26,9 @@
                             Dashboard
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" asp-area="" asp-controller="MemberShip" asp-action="Member">Members</a></li>
                             <li><a class="dropdown-item" asp-action="Roles" asp-controller="Administration">Roles</a></li>
                             <li><a class="dropdown-item" asp-action="SubscriptionTypes" asp-controller="Administration">Subscription Type</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
                     </div>
                 }

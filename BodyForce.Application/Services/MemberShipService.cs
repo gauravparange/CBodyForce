@@ -21,22 +21,7 @@ namespace BodyForce
         }
         public async Task<IEnumerable<MembersDto>> GetAllMembers()
         {
-
-            var result = from u in (await _unitOfWork.Repository<User>().GetByConditionAsync(x => x.IsDeleted == false))
-                         join m in (await _unitOfWork.Repository<MemberShip>().GetByConditionAsync(x => x.IsDeleted == false)) on u.Id equals m.UserId
-                         select new MembersDto
-                         {
-                             MemberId = m.MemberShipId,
-                             Name = u.FirstName + " " + u.LastName,
-                             MemberCode = u.UserName,
-                             PhoneNo = u.PhoneNumber,
-                             DOJ = u.DOJ,
-                             MembershipStatus = m.Status == true ? "Active" : "Not Active",
-                             MembershipStartDate = m.StartDate,
-                             MembershipEndDate = m.EndDate,
-                             UserId = m.UserId,
-                         };
-            return result;
+            return _mapper.Map<IEnumerable<MembersDto>>(await _unitOfWork.Repository<MembershipView>().GetAllAsync());
         }
         public async Task<SignUpDto> GetMember(int UserId)
         {
