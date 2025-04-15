@@ -53,7 +53,8 @@ namespace BodyForce
                              RenewalDate = m.RenewalDate,
                              SubscriptionTypeId = m.SubscriptionTypeId,
                              SubscriptionName = s.Name,
-                             Payment = p.PaymentMethod
+                             Payment = p.PaymentMethod,
+                             PaymentId = p.PaymentId
                          }).ToList();
             return result;
 
@@ -69,6 +70,7 @@ namespace BodyForce
                 result.PaymentMethod = payment.PaymentMethod;
                 result.AmountPaid = payment.AmountPaid;
                 result.Notes = payment.Notes;
+                result.PaymentId = payment.PaymentId;
             }
             return result;
         }
@@ -78,40 +80,46 @@ namespace BodyForce
             {               
                 var subscriptionType = await _unitOfWork.Repository<SubscriptionType>().GetByIdAsync(membershipDto.SubscriptionTypeId);
 
-                var membership = new MemberShip()
+                var membership = await _unitOfWork.Repository<MemberShip>().Update(new MemberShip()
                 {
-                    MemberShipId= membershipDto.MemberShipId,
+                    MemberShipId = membershipDto.MemberShipId,
                     UserId = membershipDto.UserId,
                     SubscriptionTypeId = membershipDto.SubscriptionTypeId,
                     StartDate = membershipDto.StartDate,
                     EndDate = membershipDto.StartDate?.AddDays(subscriptionType.DurationInDays),
                     Status = true,
-                    RenewalDate = (membershipDto.StartDate?.AddDays(subscriptionType.DurationInDays))?.AddDays(1)
-                };           
+                    RenewalDate = (membershipDto.StartDate?.AddDays(subscriptionType.DurationInDays))?.AddDays(1),
+                    UpdatedOn = DateTime.Now,
+                });
 
-                if (membershipDto.MemberShipId != 0)
+                if (membershipDto.PaymentId == 0)
                 {
-                    membership.UpdatedOn = DateTime.Now;
-                    membership = await _unitOfWork.Repository<MemberShip>().Update(membership);
+                    var payment = await _unitOfWork.Repository<Payment>().AddAsync(new Payment()
+                    {
+                        MemberShipId = membershipDto.MemberShipId,
+                        UserId = membershipDto.UserId,
+                        AmountPaid = membershipDto.AmountPaid ?? 0,
+                        PaymentDate = membershipDto.PaymentDate ?? DateTime.MinValue,
+                        PaymentMethod = membershipDto.PaymentMethod,
+                        Notes = membershipDto.Notes ?? string.Empty,
+                        CreatedOn = DateTime.Now,
+                    });
                 }
                 else
                 {
-                    membership.CreatedOn = DateTime.Now;
-                    membership = await _unitOfWork.Repository<MemberShip>().AddAsync(membership);
+                    var payment = await _unitOfWork.Repository<Payment>().Update(new Payment()
+                    {
+                        PaymentId = membershipDto.PaymentId,
+                        MemberShipId = membershipDto.MemberShipId,
+                        UserId = membershipDto.UserId,
+                        AmountPaid = membershipDto.AmountPaid ?? 0,
+                        PaymentDate = membershipDto.PaymentDate ?? DateTime.MinValue,
+                        PaymentMethod = membershipDto.PaymentMethod,
+                        Notes = membershipDto.Notes ?? string.Empty,
+                        UpdatedOn = DateTime.Now,
+                    });
                 }
-                await  _unitOfWork.Repository<MemberShip>().SaveChangesAsync();
-
-                var payment = await _unitOfWork.Repository<Payment>().AddAsync(new Payment()
-                {
-                    MemberShipId = membershipDto.MemberShipId,
-                    UserId = membershipDto.UserId,
-                    AmountPaid = membershipDto.AmountPaid ?? 0,
-                    PaymentDate = membershipDto.PaymentDate ?? DateTime.MinValue,
-                    PaymentMethod = membershipDto.PaymentMethod,
-                    Notes = membershipDto.Notes ?? string.Empty,
-                    CreatedOn = DateTime.Now,
-                });
-
+                await _unitOfWork.Repository<MemberShip>().SaveChangesAsync();
                 await _unitOfWork.Repository<Payment>().SaveChangesAsync();
                 return IdentityResult.Success;
             }

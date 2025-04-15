@@ -9,6 +9,7 @@ namespace BodyForce
     public class ViewMembershipDto
     {
         public int MemberShipId { get; set; }
+        public int PaymentId { get; set; }
         public int UserId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

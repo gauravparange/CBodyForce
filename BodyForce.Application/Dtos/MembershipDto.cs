@@ -12,6 +12,7 @@ namespace BodyForce
     {
         public int UserId { get; set; } 
         public int MemberShipId { get; set; }
+        public int PaymentId { get; set; }
         [Required(ErrorMessage ="Please select the type of subscription")]
         [Display(Name ="Subscripiton Type")]
         public int SubscriptionTypeId { get; set; }

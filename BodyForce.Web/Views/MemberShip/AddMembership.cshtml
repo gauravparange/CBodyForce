@@ -8,16 +8,13 @@
         Value = st.SubscriptionTypeId.ToString(),
         Text = st.Name
     });
-    string formAction = string.Empty;
     string buttonName = string.Empty;
     if(ViewBag.forAdd == true)
     {
-        formAction = "AddMembership";
         buttonName = "Add";
     }
     else
     {
-        formAction = "EditMembership";
         buttonName = "Edit";
     }
 }
@@ -30,11 +27,12 @@
                     Add Membership
                 </h4>
                 <div class="card-body">
-                    <form asp-action="@formAction">
+                    <form asp-action="AddMembership">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <input asp-for="MemberShipId" hidden />
                         <input asp-for="UserId" hidden />
+                        <input asp-for="PaymentId" hidden />
                         <div class="row  justify-content-center">
                             <div class="col-md-6">
                                 <div class="form-group">
