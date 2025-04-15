@@ -17,7 +17,7 @@ namespace BodyForce.Web.Controllers
 
         public IActionResult SignUp(bool SignUp = true)
         {
-            ViewBag.SignUp = SignUp;
+            TempData["SignUp"] = SignUp;
             return View(new SignUpDto());
         }
         [AllowAnonymous]
@@ -27,10 +27,11 @@ namespace BodyForce.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-               var result = await _userService.SignUpUserAsync(signUpDto);
+                bool SignUp = Convert.ToBoolean(TempData["SignUp"]);
+                var result = await _userService.SignUpUserAsync(signUpDto);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("login");
+                    return RedirectToAction("Member", "Membership");
                 }
                 else
                 {

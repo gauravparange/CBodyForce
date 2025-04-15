@@ -32,19 +32,6 @@ namespace BodyForce
             var user = _mapper.Map<User>(signUpDto);
             user.CreatedOn = DateTime.Now;
             user.UserName = GetMemberCode();
-            //{
-            //    UserName = GetMemberCode(),
-            //    FirstName = signUpDto.FirstName,
-            //    LastName = signUpDto.LastName,
-            //    Email = signUpDto.Email,
-            //    DOB = signUpDto.DOB,
-            //    PhoneNumber = signUpDto.PhoneNo,
-            //    ParentPhoneNo = signUpDto.ParentPhoneNo,
-            //    Address = signUpDto.Address,
-            //    Weight = signUpDto?.Weight,
-            //    Height = signUpDto?.Height,
-            //    CreatedOn = DateTime.Now
-            //};
             string password = user.FirstName + "@" + user.DOB.Year.ToString();
             var result = await _userManager.CreateAsync(user, password);
 

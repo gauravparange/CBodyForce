@@ -44,14 +44,14 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label asp-for="DurationInMonths" class="form-label">Duration (Months)</label>
-                            <input asp-for="DurationInMonths" class="form-control" />
+                            <input asp-for="DurationInMonths" id="month" oninput="calculateDays()" class="form-control" />
                             <span asp-validation-for="DurationInMonths" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label asp-for="DurationInDays" class="form-label">Duration (Days)</label>
-                            <input asp-for="DurationInDays" class="form-control" />
+                            <input asp-for="DurationInDays" id="days" class="form-control" />
                             <span asp-validation-for="DurationInDays" class="text-danger"></span>
                         </div>
                     </div>
@@ -77,4 +77,28 @@
     </div>
 </div>
 
+<script>
+    function calculateDays() {
+        const monthsToAdd = parseInt(document.getElementById("month").value);
+        const startDate = new Date(); // Today
+        let totalDays = 0;
 
+        if (!isNaN(monthsToAdd) && monthsToAdd > 0) {
+            let currentMonth = startDate.getMonth(); // 0-indexed
+            let currentYear = startDate.getFullYear();
+
+            for (let i = 0; i < monthsToAdd; i++) {
+                const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                totalDays += daysInMonth;
+
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+            }
+        }
+
+        document.getElementById("days").value = totalDays;
+    }
+</script>

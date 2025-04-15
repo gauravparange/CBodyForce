@@ -3,6 +3,10 @@
 @{
     int srNo = 1; // Start from 1 instead of 0
 }
+<div id="memberListHeader" class="d-flex justify-content-between align-items-center mb-2" style="display: none;">
+    <h5 class="mb-0">Member List</h5>
+    <button class="btn btn-outline-danger btn-sm" onclick="clearMemberList()">Clear List</button>
+</div>
 <div class="table-responsive">
     <table class="table table-striped  table-bordered">
         <thead>
@@ -27,13 +31,10 @@
                             <div class="d-flex justify-content-around flex-wrap gap-2">
                                 <a class="btn btn-outline-primary btn-sm" asp-action="ViewMembership" asp-controller="MemberShip" asp-route-UserId="@member.UserId">View Membership</a>
                             </div>
-
                         </td>
-
                         <td>
                             <div class="d-flex justify-content-around flex-wrap gap-2">
-                                <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditMember" asp-controller="MemberShip" asp-route-UserId="@member.UserId"></a>
-                               
+                                <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditMember" asp-controller="MemberShip" asp-route-UserId="@member.UserId"></a>                               
                             </div>
                         </td>
                     </tr>

@@ -33,8 +33,9 @@ namespace BodyForce
             ViewBag.UserId = UserId;
             return View(await _memberShipService.ViewMemberShip(UserId));
         }
-        public async Task<IActionResult> AddMembership(int UserId)
+        public async Task<IActionResult> AddMembership(int UserId,bool forAdd = true)
         {
+            ViewBag.forAdd = forAdd;
             return View(await _memberShipService.GetMemberShip(UserId));
         }
         [HttpPost]
@@ -56,7 +57,7 @@ namespace BodyForce
             return View();
         }
         //[HttpPost]
-        //public async Task<IActionResult> EditMember(SignUpDto signUpDto)
+        //public async Task<IActionResult> EditMembership(SignUpDto signUpDto)
         //{
 
         //    return View(await _memberShipService.EditMember(signUpDto));

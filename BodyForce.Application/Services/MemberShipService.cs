@@ -21,7 +21,15 @@ namespace BodyForce
         }
         public async Task<IEnumerable<MembersDto>> GetAllMembers()
         {
-            return _mapper.Map<IEnumerable<MembersDto>>(await _unitOfWork.Repository<MembershipView>().GetAllAsync());
+            try
+            {
+                return _mapper.Map<IEnumerable<MembersDto>>(await _unitOfWork.Repository<MembershipView>().GetAllAsync());
+            }
+            catch (Exception ex)
+            {
+                throw new NotImplementedException(ex.Message);
+            }
+            
         }
         public async Task<SignUpDto> GetMember(int UserId)
         {

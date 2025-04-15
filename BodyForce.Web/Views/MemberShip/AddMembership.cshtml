@@ -8,6 +8,18 @@
         Value = st.SubscriptionTypeId.ToString(),
         Text = st.Name
     });
+    string formAction = string.Empty;
+    string buttonName = string.Empty;
+    if(ViewBag.forAdd == true)
+    {
+        formAction = "AddMembership";
+        buttonName = "Add";
+    }
+    else
+    {
+        formAction = "EditMembership";
+        buttonName = "Edit";
+    }
 }
 
 <div class="container mt-4">
@@ -18,7 +30,7 @@
                     Add Membership
                 </h4>
                 <div class="card-body">
-                    <form asp-action="AddMembership">
+                    <form asp-action="@formAction">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <input asp-for="MemberShipId" hidden />
@@ -87,7 +99,7 @@
                         
 
                         <div class="form-group d-flex justify-content-center mt-4">
-                            <input type="submit" value="Add" class="btn btn-primary px-4" />
+                            <input type="submit" value="@buttonName" class="btn btn-primary px-4" />
                         </div>
                     </form>
                 </div>

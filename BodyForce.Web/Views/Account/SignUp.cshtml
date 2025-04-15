@@ -5,7 +5,8 @@
 
     ViewData["Title"] = "Add Member";
     string ButtonName = "Add Member";
-    if (ViewBag.SignUp == true)
+    bool SignUp = Convert.ToBoolean(TempData["SignUp"]);
+    if (SignUp)
     {
         ViewData["Title"] = "SignUp";
         ButtonName = "Sign Up";
@@ -111,7 +112,7 @@
                 <div class="form-group">
                     <label asp-for="RoleId" class="control-label"></label>
 
-                    @if (ViewBag.SignUp == true)
+                    @if (SignUp)
                     {
                         <select asp-for="RoleId" class="form-control" asp-items="@(new SelectList(_roleManager.Roles, "Id", "Name", Model.RoleId))" disabled>
                          
@@ -132,7 +133,6 @@
                         
                     <span asp-validation-for="RoleId" class="text-danger"></span>
                 </div>
-               
                 <!-- Centered Submit Button -->
                 <div class="form-group d-flex justify-content-center mt-4">
                     <input type="submit" value="@ButtonName" class="btn btn-primary px-4" />

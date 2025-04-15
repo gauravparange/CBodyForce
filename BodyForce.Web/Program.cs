@@ -47,6 +47,9 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    var dbContext = scope.ServiceProvider.GetRequiredService<BodyForceDbContext>();
+    dbContext.Database.Migrate();
+
     var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
     await dataSeeder.SeedRolesAndAdminAsync();
 }

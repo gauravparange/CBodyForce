@@ -14,7 +14,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@Model.ActiveMembershipsCount</h5>
                     <p class="card-text">Active Memberships</p>
-                        <a href="#" class="btn btn-primary  btn-view-all" data-category="ActiveMemberships">View All</a>
+                        <a href="#" onclick="loadMembers('ActiveMemberships')" class="btn btn-primary">View All</a>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@Model.SubscriptionRenewalCount</h5>
                     <p class="card-text">Subscription Renewals</p>
-                        <a href="#" class="btn btn-primary  btn-view-all" data-category="SubscriptionRenewals">View All</a>
+                        <a href="#" onclick="loadMembers('SubscriptionRenewals')" class="btn btn-primary">View All</a>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@Model.PendingPaymentsCount</h5>
                     <p class="card-text">Pending Payments</p>
-                        <a href="#" class="btn btn-primary btn-view-all" data-category="PendingPayments">View All</a>
+                        <a href="#" onclick="loadMembers('PendingPayments')" class="btn btn-primary">View All</a>
                 </div>
             </div>
         </div>
@@ -47,44 +47,62 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h5 class="card-title">3</h5>
-                    <p class="card-text">Expiring Soon</p>
-                        <a href="#" class="btn btn-primary btn-view-all" data-category="ActiveMemberships">View All</a>
+                    <p class="card-text">InActive members</p>
+                        <a href="#" onclick="loadMembers('InActive')" class="btn btn-primary">View All</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+           
+            <div id="memberListContainer" class="col-12">
+                
+                <!-- AJAX-loaded partial view goes here -->
+            </div>
+    </div>
+
     }
 </div>
-
-<partial name="_ViewAllModal" />
-   
-<!-- JavaScript -->
-
-
-<!-- Bootstrap JS and Popper.js -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('.btn-view-all').click(function (e) {
-            e.preventDefault();
+    function loadMembers(category) {
+        // Push the selected category to the browser's history
+        history.pushState({ category: category }, '', `?category=${category}`);
 
-            var category = $(this).data('category');
+        // Load the partial view via AJAX
+        fetch(`/Home/GetList?category=${category}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.text();
+            })
+            .then(html => {
+                document.getElementById("memberListContainer").innerHTML = html;
+            })
+            .catch(error => console.error('Error loading members:', error));
+    }
 
-            $.ajax({
-                url: '/Home/GetList',
-                type: 'GET',
-                data: { category: category },
-                success: function (response) {
-                    $('#list-container').html(response);
-                    $('#viewAllModal').modal('show'); // Show modal after content is loaded
-                },
-                error: function () {
-                    alert("An error occurred while loading the data.");
-                }
-            });
-        });
-    });
+    // Handle back/forward browser buttons
+    window.onpopstate = function (event) {
+        if (event.state && event.state.category) {
+            loadMembers(event.state.category);
+        } else {
+            // Clear the container if no state (maybe back to dashboard view)
+            clearMemberList();
+        }
+    };
+
+    function clearMemberList() {
+        document.getElementById("memberListContainer").innerHTML = "";
+    }
+
+    // Optional: On first page load, check if there's a category in query params (e.g., from reload/bookmark)
+    window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        if (category) {
+            loadMembers(category);
+        }
+    };
 </script>
 
          <style>

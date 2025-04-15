@@ -72,6 +72,12 @@ namespace BodyForce
 
                     data = memberships.Where(m => payments.Any(p => p.MemberShipId == m.MemberId));
                     break;
+                case "InActive":
+                    data = data.Where(m => m.MembershipStatus == false);
+                    break;
+                default:
+                    data = null;
+                    break;
             }
 
             return data;
