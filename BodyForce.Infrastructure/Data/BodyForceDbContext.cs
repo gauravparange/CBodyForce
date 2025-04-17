@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BodyForce
 {
-    public class BodyForceDbContext : IdentityDbContext<User, Role, int,
+    public class BodyForceDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int,
                                                         IdentityUserClaim<int>,
                                                         IdentityUserRole<int>,
                                                         IdentityUserLogin<int>,
@@ -31,8 +31,8 @@ namespace BodyForce
             base.OnModelCreating(builder);
 
             // ✅ Renaming Identity tables
-            builder.Entity<User>().ToTable("Users"); // Renaming AspNetUsers to Users
-            builder.Entity<Role>().ToTable("Roles"); // Renaming AspNetRoles to Roles
+            builder.Entity<ApplicationUser>().ToTable("Users"); // Renaming AspNetUsers to Users
+            builder.Entity<ApplicationRole>().ToTable("Roles"); // Renaming AspNetRoles to Roles
             builder.Entity<IdentityUserRole<int>>().ToTable("UserRoles"); // Renaming AspNetUserRoles
             builder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims"); // AspNetUserClaims
             builder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins"); // AspNetUserLogins

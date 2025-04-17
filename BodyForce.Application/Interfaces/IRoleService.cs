@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.Metadata;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿
+using BodyForce.Application;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +10,10 @@ namespace BodyForce
 {
     public interface IRoleService
     {
-        Task<IdentityResult> CreateRoleAsync(CreateRoleDto roleDto);
-        Task<IdentityResult> EditRoleAsync(CreateRoleDto roleDto);
-        Task<IEnumerable<Role>> GetAllRoles();
-        Task<Role> GetRoleById(int RoleId);
-        Task<IdentityResult> DeleteRole(int Id);
+        Task<ResponseResult> CreateRoleAsync(CreateRoleDto roleDto);
+        Task<ResponseResult> EditRoleAsync(CreateRoleDto roleDto);
+        Task<ResponseResult<IEnumerable<Role>>> GetAllRoles();
+        Task<ResponseResult<Role>> GetRoleById(int RoleId);
+        Task<ResponseResult> DeleteRole(int Id);
     }
 }

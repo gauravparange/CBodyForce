@@ -1,0 +1,158 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+
+namespace BodyForce
+{
+    public class UserService : IUserService
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+        public async Task<ResponseResult> SignUpUserAsync(SignUpDto signUpDto)
+        {
+            try
+            {
+                
+                var user = _mapper.Map<ApplicationUser>(signUpDto);
+                user.CreatedOn = DateTime.Now;
+                user.UserName = GetMemberCode();
+                string password = user.FirstName + "@" + user.DOB.Year.ToString();
+                var result = await _userManager.CreateAsync(user, password);
+
+                if (result.Succeeded)
+                {
+                    var role = await _roleManager.FindByIdAsync(signUpDto.RoleId.ToString());
+                    if (role != null)
+                    {
+                        await _userManager.AddToRoleAsync(user, role.Name);
+                    }
+                    var userID = await _userManager.FindByEmailAsync(user.Email);
+                    var member = new MemberShip()
+                    {
+                        MemberShipId = 0,
+                        UserId = userID.Id,
+                        Status = false
+                    };
+                    var _result = await _unitOfWork.Repository<MemberShip>().AddAsync(member);
+                    await _unitOfWork.Repository<MemberShip>().SaveChangesAsync();
+
+                    return new ResponseResult(true, new List<string> { "User created successfully" });
+                }
+                return new ResponseResult(false, result.Errors.Select(e => e.Description).ToList());
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult(false, new List<string> {ex.Message.ToString()});
+            }            
+        }
+
+        public async Task<ResponseResult> UpdateUserAsync(EditMemberDto memberDto)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(memberDto.Id.ToString());
+                if (user == null)
+                {
+                    return new ResponseResult(false, new List<string> { $"User with ID {memberDto.Id} not found." });
+                }
+                _mapper.Map(memberDto, user);
+                user.UpdatedOn = DateTime.Now;
+
+                return new ResponseResult(true, new List<string> { $"User updated." } );
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult(false, new List<string> { ex.Message.ToString() });
+            }
+
+
+        }
+        public async Task<ResponseResult> LogInUserAsync(LogInDto logInDto)
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(logInDto.UserName);
+                if (user == null)
+                {
+                    return new ResponseResult(false, new List<string> { "User not found." });
+                }
+                else
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user, logInDto.Password, false, false);
+
+                    if (result.Succeeded)
+                    {
+                        return new ResponseResult(true, new List<string> { "" });
+                    }
+                    else if (result.IsNotAllowed)
+                    {
+                        return new ResponseResult(false, new List<string> { "LogIn Not Allowed" });
+                    }
+                    else
+                    {
+                        return new ResponseResult(false, new List<string> { "Invalid User Name or Password" });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseResult(false, new List<string> { ex.Message.ToString() });
+            }
+        }
+        public async Task<bool> IsEmailAvailableAsync(string Email)
+        {
+            if(await _userManager.FindByEmailAsync(Email) == null)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async void LogOut()
+        {
+             await _signInManager.SignOutAsync();
+        }
+
+        private string GetMemberCode()
+        {
+
+            var users = _userManager.Users.ToList();
+
+            // Extract valid usernames that start with "BF" and are followed by a number
+            var validUserCodes = users
+                .Select(u => u.UserName)
+                .Where(name => name != null && name.StartsWith("BF") && name.Length > 2)
+                .Select(name =>
+                {
+                    var numberPart = name.Substring(2);
+                    return int.TryParse(numberPart, out int num) ? num : (int?)null;
+                })
+                .Where(num => num.HasValue)
+                .Select(num => num.Value)
+                .ToList();
+
+            // Get next number
+            int nextNumber = validUserCodes.Any() ? validUserCodes.Max() + 1 : 1;
+
+            // Format it as "BF" + 4-digit number
+            return "BF" + nextNumber.ToString().PadLeft(4, '0');
+        }
+    }
+}

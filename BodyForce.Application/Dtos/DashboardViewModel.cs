@@ -11,5 +11,6 @@ namespace BodyForce
         public int ActiveMembershipsCount { get; set; }
         public int SubscriptionRenewalCount { get; set; }
         public int PendingPaymentsCount { get; set; }
+        public int InActiveMembershipsCount { get; set; }
     }
 }
