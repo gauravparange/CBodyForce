@@ -29,11 +29,24 @@ namespace BodyForce
         public async Task<ResponseResult> SignUpUserAsync(SignUpDto signUpDto)
         {
             try
-            {
-                
-                var user = _mapper.Map<ApplicationUser>(signUpDto);
-                user.CreatedOn = DateTime.Now;
-                user.UserName = GetMemberCode();
+            {                
+                var userEntity = _mapper.Map<User>(signUpDto);
+
+                var user = new ApplicationUser()
+                {
+                    FirstName = userEntity.FirstName,
+                    LastName = userEntity.LastName,
+                    Email = userEntity.Email,
+                    PhoneNumber = userEntity.PhoneNo,
+                    ParentPhoneNo = userEntity.ParentPhoneNo,
+                    DOB = userEntity.DOB,
+                    DOJ = userEntity.DOJ,
+                    Address = userEntity.Address,
+                    Height = userEntity.Height,
+                    Weight = userEntity.Weight,
+                    UserName = GetMemberCode(),
+                    CreatedOn = DateTime.Now
+                };
                 string password = user.FirstName + "@" + user.DOB.Year.ToString();
                 var result = await _userManager.CreateAsync(user, password);
 
