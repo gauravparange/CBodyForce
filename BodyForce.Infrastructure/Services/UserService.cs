@@ -30,23 +30,23 @@ namespace BodyForce
         {
             try
             {                
-                var userEntity = _mapper.Map<User>(signUpDto);
+                var user =  UserRoleMapper.ToIdentityUser(_mapper.Map<User>(signUpDto));
 
-                var user = new ApplicationUser()
-                {
-                    FirstName = userEntity.FirstName,
-                    LastName = userEntity.LastName,
-                    Email = userEntity.Email,
-                    PhoneNumber = userEntity.PhoneNo,
-                    ParentPhoneNo = userEntity.ParentPhoneNo,
-                    DOB = userEntity.DOB,
-                    DOJ = userEntity.DOJ,
-                    Address = userEntity.Address,
-                    Height = userEntity.Height,
-                    Weight = userEntity.Weight,
-                    UserName = GetMemberCode(),
-                    CreatedOn = DateTime.Now
-                };
+                //var user = new ApplicationUser()
+                //{
+                //    FirstName = userEntity.FirstName,
+                //    LastName = userEntity.LastName,
+                //    Email = userEntity.Email,
+                //    PhoneNumber = userEntity.PhoneNo,
+                //    ParentPhoneNo = userEntity.ParentPhoneNo,
+                //    DOB = userEntity.DOB,
+                //    DOJ = userEntity.DOJ,
+                //    Address = userEntity.Address,
+                //    Height = userEntity.Height,
+                //    Weight = userEntity.Weight,
+                //    UserName = GetMemberCode(),
+                //    CreatedOn = DateTime.Now
+                //};
                 string password = user.FirstName + "@" + user.DOB.Year.ToString();
                 var result = await _userManager.CreateAsync(user, password);
 
@@ -81,15 +81,29 @@ namespace BodyForce
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(memberDto.Id.ToString());
-                if (user == null)
+                // Step 1: Get tracked ApplicationUser (EF is tracking this)
+                var existingIdentityUser = await _userManager.FindByIdAsync(memberDto.Id.ToString());
+                if (existingIdentityUser == null)
                 {
                     return new ResponseResult(false, new List<string> { $"User with ID {memberDto.Id} not found." });
                 }
-                _mapper.Map(memberDto, user);
-                user.UpdatedOn = DateTime.Now;
 
-                return new ResponseResult(true, new List<string> { $"User updated." } );
+                // Step 2: Map to Domain User
+                var domainUser = UserRoleMapper.ToDomain(existingIdentityUser);
+
+                // Step 3: Map EditMemberDto to Domain User (your existing mapping)
+                _mapper.Map(memberDto, domainUser);
+
+                // Step 4: Map updated Domain User *onto existing IdentityUser*
+                UserRoleMapper.MapToExistingIdentityUser(domainUser, existingIdentityUser);
+
+                // Step 5: Update timestamp
+                existingIdentityUser.UpdatedOn = DateTime.Now;
+
+                // Step 6: Save update
+                await _userManager.UpdateAsync(existingIdentityUser);
+
+                return new ResponseResult(true, new List<string> { "User updated." });
             }
             catch (Exception ex)
             {

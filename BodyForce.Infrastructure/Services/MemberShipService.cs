@@ -33,7 +33,7 @@ namespace BodyForce
         }
         public async Task<EditMemberDto> GetMember(int UserId)
         {
-            var user = await _unitOfWork.Repository<ApplicationUser>().GetByConditionAsync(x => x.IsDeleted == false);
+            var user = UserRoleMapper.ToDomainList(await _unitOfWork.Repository<ApplicationUser>().GetByConditionAsync(x => x.IsDeleted == false));    
             var result = _mapper.Map<EditMemberDto>(user.FirstOrDefault(x => x.Id == UserId));
             
             return result;
