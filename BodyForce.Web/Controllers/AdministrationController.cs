@@ -17,7 +17,7 @@ namespace BodyForce.Web.Controllers
         public async Task<IActionResult> Roles()
         {
             var result = await _roleService.GetAllRoles();
-            return View(result.Data);
+            return View(result);
         }
 
         [Route("CreateRole")]
@@ -32,26 +32,26 @@ namespace BodyForce.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _roleService.CreateRoleAsync(roleDto);
-                if (result.Success)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("Roles", "Administration");
                 }
-                foreach (var error in result.ErrorMessages)
+                foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error);
+                    ModelState.AddModelError("", error.Description);
                 }
             }
             return View(roleDto);
         }
         public async Task<IActionResult> EditRole(int RoleId)
         {
-            var result = await _roleService.GetRoleById(RoleId); // Implement this method to fetch role details
+            var role = await _roleService.GetRoleById(RoleId); // Implement this method to fetch role details
 
-            if (result.Data == null)
+            if (role == null)
             {
                 return NotFound(); // If role not found, return NotFound
             }
-            var role = result.Data;
+
             return View("CreateRole", new CreateRoleDto() { RoleId = role.Id,RoleName = role.Name});
         }
         [HttpPost]
@@ -60,13 +60,13 @@ namespace BodyForce.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _roleService.EditRoleAsync(roleDto);
-                if (result.Success)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("Roles", "Administration");
                 }
-                foreach (var error in result.ErrorMessages)
+                foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error);
+                    ModelState.AddModelError("", error.Description);
                 }
             }
             return View(roleDto);
@@ -75,12 +75,12 @@ namespace BodyForce.Web.Controllers
         public async Task<IActionResult> DeleteRole(int Id)
         {
             var result = await _roleService.DeleteRole(Id);
-            if (result.Success)
+            if (result.Succeeded)
             {
                 TempData["Success"] = "Role deleted successfully.";
                 return RedirectToAction("Roles", "Administration");
             }
-            TempData["Error"] = string.Join("; ", result.ErrorMessages.Select(e => e));
+            TempData["Error"] = string.Join("; ", result.Errors.Select(e => e.Description));
             return RedirectToAction("Roles", "Administration");
         }
 
@@ -99,13 +99,13 @@ namespace BodyForce.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _subscriptionService.AddSubscription(subscriptionDto);
-                if (result.Success)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("SubscriptionTypes", "Administration");
                 }
-                foreach (var error in result.ErrorMessages)
+                foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error);
+                    ModelState.AddModelError("", error.Description);
                 }
             }
             return View();
@@ -125,13 +125,13 @@ namespace BodyForce.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _subscriptionService.EditSubscription(subscriptionDto);
-                if (result.Success)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("SubscriptionTypes", "Administration");
                 }
-                foreach (var error in result.ErrorMessages)
+                foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error);
+                    ModelState.AddModelError("", error.Description);
                 }
             }
             return View(subscriptionDto);
@@ -141,12 +141,12 @@ namespace BodyForce.Web.Controllers
         {
              var result =  await _subscriptionService.DeleteSubscription(Id);
 
-            if (result.Success)
+            if (result.Succeeded)
             {
                 TempData["Success"] = "Role deleted successfully.";
                 return RedirectToAction("SubscriptionTypes", "Administration");
             }
-            TempData["Error"] = string.Join("; ", result.ErrorMessages.Select(e => e));
+            TempData["Error"] = string.Join("; ", result.Errors.Select(e => e.Description));
             return RedirectToAction("SubscriptionTypes", "Administration");           
         }
     }

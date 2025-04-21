@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BodyForce.Application\BodyForce.Application.csproj" />
     <ProjectReference Include="..\BodyForce.Domain\BodyForce.Domain.csproj" />
   </ItemGroup>
 

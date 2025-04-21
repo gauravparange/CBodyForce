@@ -17,7 +17,7 @@ namespace BodyForce
         [Required(ErrorMessage ="Please enter your phone number")]
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
+        public string PhoneNo { get; set; }
         public string? ParentPhoneNo { get; set; }
 
 

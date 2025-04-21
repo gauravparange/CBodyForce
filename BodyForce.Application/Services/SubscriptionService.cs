@@ -27,47 +27,55 @@ namespace BodyForce
             var result = await _unitOfWork.Repository<SubscriptionType>().GetByIdAsync(subscriptionTypeId);
             return _mapper.Map<SubscriptionDto>(result);
         }
-        public async Task<ResponseResult> AddSubscription(SubscriptionDto subscriptionDto)
+        public async Task<IdentityResult> AddSubscription(SubscriptionDto subscriptionDto)
         {
             try
             {
                 var result = await _unitOfWork.Repository<SubscriptionType>().AddAsync(_mapper.Map<SubscriptionType>(subscriptionDto));
                 await _unitOfWork.Repository<SubscriptionType>().SaveChangesAsync();
-                return new ResponseResult(true);
+                return IdentityResult.Success;
             }
-
             catch (Exception ex)
             {
-                return new ResponseResult(false, new List<string> { ex.Message.ToString() });
-            }
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = ex.Message.ToString()
+                });
+            }            
         }
-        public async Task<ResponseResult> EditSubscription(SubscriptionDto subscriptionDto)
+        public async Task<IdentityResult> EditSubscription(SubscriptionDto subscriptionDto)
         {
             try
             {
                 var result = await  _unitOfWork.Repository<SubscriptionType>().Update(_mapper.Map<SubscriptionType>(subscriptionDto));
                 await _unitOfWork.Repository<SubscriptionType>().SaveChangesAsync();
-                return new ResponseResult(true);
+                return IdentityResult.Success;
             }
             catch (Exception ex)
             {
-                return new ResponseResult(false, new List<string> { ex.Message.ToString() });
-            }
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = ex.Message.ToString()
+                });
+            }            
         }
-        public async Task<ResponseResult> DeleteSubscription(int Id)
+        public async Task<IdentityResult> DeleteSubscription(int Id)
         {
             try
             {
                 var result = await  _unitOfWork.Repository<SubscriptionType>().GetByIdAsync(Id);
                 result.IsDeleted = true;
                 await _unitOfWork.Repository<SubscriptionType>().SaveChangesAsync();
-                return new ResponseResult(true);
-            }
+                return IdentityResult.Success;
 
+            }
             catch (Exception ex)
             {
-                return new ResponseResult(false, new List<string> { ex.Message.ToString() });
-            }
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = ex.Message.ToString()
+                });
+            }            
         }
     }
 }

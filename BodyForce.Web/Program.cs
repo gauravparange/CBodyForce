@@ -9,13 +9,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<BodyForceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+builder.Services.AddIdentity<User, Role>(options =>
 {
     // Optional: Configure identity options, including password complexity and unique email requirement
     options.User.RequireUniqueEmail = true;  // Ensure that the email is unique in the system
 })
 .AddEntityFrameworkStores<BodyForceDbContext>()
-.AddRoles<ApplicationRole>()
+.AddRoles<Role>()
 .AddDefaultTokenProviders();
 builder.Services.ConfigureApplicationCookie(config =>
 {

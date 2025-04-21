@@ -9,18 +9,12 @@
         Text = st.Name
     });
     string buttonName = string.Empty;
-    string actionName = string.Empty;
-    string headerName = string.Empty;
     if(ViewBag.forAdd == true)
     {
-        headerName = "Add Membership";
-        actionName = "AddMembership";
         buttonName = "Add";
     }
     else
     {
-        headerName = "Edit Membership";
-        actionName = "EditMembership";
         buttonName = "Edit";
     }
 }
@@ -30,10 +24,10 @@
         <div class="col-md-6">
             <div class="card  shadow-sm">
                 <h4 class="card-header text-center text-primary">
-                    @headerName
+                    Add Membership
                 </h4>
                 <div class="card-body">
-                    <form asp-action="@actionName">
+                    <form asp-action="AddMembership">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <input asp-for="MemberShipId" hidden />

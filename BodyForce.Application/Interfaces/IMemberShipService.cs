@@ -1,15 +1,14 @@
 ﻿
-
+using Microsoft.AspNetCore.Identity;
 
 namespace BodyForce
 {
     public interface IMemberShipService
     {
         Task<IEnumerable<MembersDto>> GetAllMembers();
-        Task<EditMemberDto> GetMember(int UserId);
+        Task<SignUpDto> GetMember(int UserId);
         Task<List<ViewMembershipDto>> ViewMemberShip(int UserId);
-        Task<MembershipDto> GetMemberShip(int userId, bool forAdd);
-        Task<ResponseResult> AddMemberShip(MembershipDto membershipDto);
-        Task<ResponseResult> EditMemberShip(MembershipDto membershipDto);
+        Task<MembershipDto> GetMemberShip(int userId);
+        Task<IdentityResult> AddMemberShip(MembershipDto membershipDto);
     }
 }

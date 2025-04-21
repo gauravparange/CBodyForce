@@ -15,10 +15,8 @@ namespace BodyForce
             CreateMap<SubscriptionDto, SubscriptionType>();
 
             CreateMap<SignUpDto, User>();
-            CreateMap<User, SignUpDto>();
-
-            CreateMap<EditMemberDto, User>();
-            CreateMap<User, EditMemberDto>();
+            CreateMap<User, SignUpDto>()
+                .ForMember(dest => dest.PhoneNo, opt => opt.MapFrom(src => src.PhoneNumber));
 
             CreateMap<MembershipDto, MemberShip>();
             CreateMap<MemberShip, MembershipDto>();

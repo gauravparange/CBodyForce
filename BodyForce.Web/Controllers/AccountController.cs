@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BodyForce.Web.Controllers
@@ -30,15 +29,15 @@ namespace BodyForce.Web.Controllers
             {
                 bool SignUp = Convert.ToBoolean(TempData["SignUp"]);
                 var result = await _userService.SignUpUserAsync(signUpDto);
-                if (result.Success)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("Member", "Membership");
                 }
                 else
                 {
-                    foreach (var error in result.ErrorMessages)
+                    foreach (var error in result.Errors)
                     {
-                        ModelState.AddModelError(string.Empty, error);
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
             }
@@ -58,42 +57,28 @@ namespace BodyForce.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _userService.LogInUserAsync(loginDto);
-                if (result.Success)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("Index","Home");
                 }
-                else 
+                else if(result.IsNotAllowed)
                 {
-                    foreach (var error in result.ErrorMessages)
-                    {
-                         ModelState.AddModelError(string.Empty, error);
-                    }                    
+                    ModelState.AddModelError(string.Empty, "LogIn Not Allowed");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid User Name or Password");
                 }
             }
             return View(loginDto);
         }
-
-        //public async Task<IActionResult> Settings()
-        //{
-        //    var user = await _userService.GetUserAsync();
-        //    var userDto = new UserDto
-        //    {
-        //        FirstName = user.FirstName,
-        //        LastName = user.LastName,
-        //        Email = user.Email,
-        //        PhoneNumber = user.PhoneNumber,
-        //        UserName = user.UserName
-        //    };
-        //    return View(userDto);
-        //}
-
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> IsEmailAvailable(string Email)
         {
             //Check If the Email Id is Already in the Database
-            var isAvailable = await _userService.IsEmailAvailableAsync(Email);
-            if (isAvailable)
+            var user = await _userService.IsEmailAvailableAsync(Email);
+            if (user == null)
             {
                 return Json(true);
             }

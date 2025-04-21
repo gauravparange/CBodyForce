@@ -9,10 +9,10 @@ namespace BodyForce
 {
     public class DataSeeder
     {
-        private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<User> _userManager;
 
-        public DataSeeder(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
+        public DataSeeder(RoleManager<Role> roleManager, UserManager<User> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -21,14 +21,14 @@ namespace BodyForce
         public async Task SeedRolesAndAdminAsync()
         {
             // Define roles
-            string[] roles = { "Administrator","Member","Trainer"};
+            string[] roles = { "Administrator"};
 
             // Create roles if they don't exist
             foreach (var role in roles)
             {
                 if (!await _roleManager.RoleExistsAsync(role))
                 {
-                    await _roleManager.CreateAsync(new ApplicationRole()
+                    await _roleManager.CreateAsync(new Role()
                     {
                         Name = role,
                     });
@@ -38,7 +38,7 @@ namespace BodyForce
             var adminUser = await _userManager.FindByNameAsync("Administrator");
             if (adminUser == null)
             {
-                adminUser = new ApplicationUser
+                adminUser = new User
                 {
                     UserName = "Administrator",
                     Email = "administrator@bodyforce.in",

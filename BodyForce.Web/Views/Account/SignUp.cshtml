@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject RoleManager<ApplicationRole> _roleManager
+@inject RoleManager<Role> _roleManager
 @model SignUpDto
 @{
 
@@ -65,9 +65,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label asp-for="PhoneNumber" class="form-label"></label>
-                            <input asp-for="PhoneNumber" type="tel" class="form-control" />
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            <label asp-for="PhoneNo" class="form-label"></label>
+                            <input asp-for="PhoneNo" type="tel" class="form-control" />
+                            <span asp-validation-for="PhoneNo" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
