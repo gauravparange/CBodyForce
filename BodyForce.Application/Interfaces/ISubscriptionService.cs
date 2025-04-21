@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
 
 namespace BodyForce
 {
@@ -6,8 +6,8 @@ namespace BodyForce
     {
         Task<IEnumerable<SubscriptionDto>> GetAllSubscripitonAsync();
         Task<SubscriptionDto> GetSubscripitonTypeAsyncVyId(int subscriptionTypeId);
-        Task<IdentityResult> AddSubscription(SubscriptionDto subscriptionDto);
-        Task<IdentityResult> EditSubscription(SubscriptionDto subscriptionDto);
-        Task<IdentityResult> DeleteSubscription(int Id);
+        Task<ResponseResult> AddSubscription(SubscriptionDto subscriptionDto);
+        Task<ResponseResult> EditSubscription(SubscriptionDto subscriptionDto);
+        Task<ResponseResult> DeleteSubscription(int Id);
     }
 }

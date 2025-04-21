@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BodyForce
 {
-    public class SignUpDto
+    public class EditMemberDto
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Please enter your First Name")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -12,14 +19,12 @@ namespace BodyForce
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [Required(ErrorMessage = "Please enter your email address")]
-        [Remote(action: "IsEmailAvailable", controller: "Account", ErrorMessage = "Email is already in use.")]
         public string Email { get; set; }
-        [Required(ErrorMessage ="Please enter your phone number")]
+        [Required(ErrorMessage = "Please enter your phone number")]
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
         public string? ParentPhoneNo { get; set; }
-
 
         [Required(ErrorMessage = "Please enter your Date Of Joining")]
         [Display(Name = "Date of Joining")]
@@ -29,12 +34,10 @@ namespace BodyForce
         [Required(ErrorMessage = "Please enter your Date Of Birth")]
         [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
-        public DateTime DOB { get; set; } = DateTime.Now.AddYears(-10);
-        [Display(Name ="Role")]
-        public int RoleId { get; set; }
+        public DateTime DOB { get; set; } = DateTime.Now.AddYears(-10);    
         [Required(ErrorMessage = "Please enter your current address")]
         [Display(Name = "Address")]
-        [MinLength(5,ErrorMessage = "Address cannot be less than 10 characters")]
+        [MinLength(5, ErrorMessage = "Address cannot be less than 10 characters")]
 
         public string? Address { get; set; }
 

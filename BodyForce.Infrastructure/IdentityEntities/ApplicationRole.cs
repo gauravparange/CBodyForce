@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BodyForce
 {
-    public class Role : IdentityRole<int>
+    public class ApplicationRole : IdentityRole<int>
     {
         public int? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }

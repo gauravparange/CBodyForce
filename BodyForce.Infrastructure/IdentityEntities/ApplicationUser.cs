@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BodyForce
 {
-    public class User : IdentityUser<int>
+    public class ApplicationUser : IdentityUser<int>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -22,5 +22,6 @@ namespace BodyForce
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public Boolean IsDeleted { get; set; } = false;
+       
     }
 }

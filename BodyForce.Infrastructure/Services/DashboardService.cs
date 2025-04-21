@@ -41,11 +41,14 @@ namespace BodyForce
                 p.PaymentMethod.ToUpper() == "PENDING" &&
                 memberIds.Contains(p.MemberShipId));
 
+            var inactiveMembershipsCount = await membershipRepo.CountAsync(m => !m.IsDeleted && !m.Status);
+
             return new DashboardViewModel
             {
                 ActiveMembershipsCount = membershipCount,
                 SubscriptionRenewalCount = subscriptionRenewalCount,
-                PendingPaymentsCount = pendingPaymentsCount
+                PendingPaymentsCount = pendingPaymentsCount,
+                InActiveMembershipsCount = inactiveMembershipsCount
             };
 
         }
