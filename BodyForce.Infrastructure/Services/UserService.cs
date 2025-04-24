@@ -18,13 +18,16 @@ namespace BodyForce
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly ISmsService _smsService;
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
+            RoleManager<ApplicationRole> roleManager, IUnitOfWork unitOfWork, IMapper mapper, ISmsService smsService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _smsService = smsService;
         }
         public async Task<ResponseResult> SignUpUserAsync(SignUpDto signUpDto)
         {
@@ -66,6 +69,11 @@ namespace BodyForce
                     };
                     var _result = await _unitOfWork.Repository<MemberShip>().AddAsync(member);
                     await _unitOfWork.Repository<MemberShip>().SaveChangesAsync();
+
+                    string smsMsg = $"Dear {user.FirstName},\n\nYour BodyForce account has been created successfully.\n\nYour login credentials are:\nUsername: {user.UserName}\nPassword: {password}\n\nPlease change your password after logging in.\n\nThank you for choosing BodyForce!\n\nBest regards,\nBodyForce Team";
+
+                    await _smsService.SendSmsAsync(user.PhoneNumber, smsMsg);
+
 
                     return new ResponseResult(true, new List<string> { "User created successfully" });
                 }
