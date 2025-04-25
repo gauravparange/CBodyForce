@@ -36,7 +36,7 @@
                                 <td>@member.Payment</td>
                                 <td>
                                     <div class="d-flex justify-content-around  w-100">
-                                        <a class="bi bi-pencil-square  text-primary fs-6" asp-action="AddMembership" asp-controller="MemberShip" asp-route-UserId="@ViewBag.UserId" asp-route-forAdd="false"></a>
+                                        <a class="bi bi-pencil-square  text-primary fs-6" asp-action="EditMembership" asp-controller="MemberShip" asp-route-MembershipId="@member.MemberShipId" asp-route-UserId="@ViewBag.UserId"></a>
                                         <a style="cursor: pointer;"
                                            class="bi bi-trash text-danger fs-6"
                                            data-delete

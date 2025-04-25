@@ -35,6 +35,7 @@ namespace BodyForce
         [Required(ErrorMessage = "Please select the payment mode")]
         public string PaymentMethod  { get; set; }
         [MinLength(5)]
+        [Required(ErrorMessage = "Please enter minimum 5 characters.")]
         public string? Notes { get; set; }
     }
 }

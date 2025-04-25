@@ -18,8 +18,8 @@ namespace BodyForce
         
         public async Task<IActionResult> Member()
         {
-            
-            return View(await _memberShipService.GetAllMembers());
+            var result = await _userService.GetUserList();          
+                return View(result.Data);
         }
         public async Task<IActionResult> AddMember()
         {
@@ -52,14 +52,21 @@ namespace BodyForce
             ViewBag.UserId = UserId;
             return View(await _memberShipService.ViewMemberShip(UserId));
         }
-        public async Task<IActionResult> AddMembership(int UserId,bool forAdd = true)
+        public async Task<IActionResult> AddMembership(int UserId)
         {
-            ViewBag.forAdd = forAdd;
-            return View(await _memberShipService.GetMemberShip(UserId, forAdd));
+           
+            return View(new MembershipDto()
+            {
+                UserId = UserId,
+            });
+        }
+        public async Task<IActionResult> EditMembership(int MemberShipId, int UserId)
+        {
+            return View("AddMembership", await _memberShipService.GetMemberShip(MemberShipId));
         }
         [HttpPost]
         public async Task<IActionResult> AddMembership(MembershipDto membershipDto)
-        {
+         {
 
             if (ModelState.IsValid)
             {

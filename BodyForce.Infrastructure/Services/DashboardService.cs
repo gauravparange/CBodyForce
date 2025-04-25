@@ -1,4 +1,5 @@
 ﻿
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,10 +13,12 @@ namespace BodyForce
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMemberShipService _memberShipService;
-        public DashboardService(IUnitOfWork unitOfWork, IMemberShipService memberShipService)
+        private readonly IMapper _mapper;
+        public DashboardService(IUnitOfWork unitOfWork, IMemberShipService memberShipService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _memberShipService = memberShipService;
+            _mapper = mapper;
         }
         public async Task<DashboardViewModel> GetDashboardCount()
         {
@@ -54,7 +57,7 @@ namespace BodyForce
         }
         public async Task<IEnumerable<MembersDto>> GetList(string category)
         {
-            IEnumerable<MembersDto> data =   await _memberShipService.GetAllMembers();
+            IEnumerable<MembersDto> data = _mapper.Map<IEnumerable<MembersDto>>(await _unitOfWork.Repository<MembershipView>().GetAllAsync());
 
             switch (category)
             {

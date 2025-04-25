@@ -11,7 +11,7 @@
     string buttonName = string.Empty;
     string actionName = string.Empty;
     string headerName = string.Empty;
-    if(ViewBag.forAdd == true)
+    if(Model.MemberShipId == 0)
     {
         headerName = "Add Membership";
         actionName = "AddMembership";

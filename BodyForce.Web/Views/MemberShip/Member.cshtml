@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<MembersDto>
+@model IEnumerable<UserDto>
 
 @{
     int srNo = 1; // Start from 1 instead of 0
@@ -17,7 +17,6 @@
                             <th>Member Code</th>
                             <th>Phone Number</th>
                             <th>Joining Date</th>
-                            <th>Status</th>
                             <th>Membership</th>
                             <th>Actions</th>
                         </tr>
@@ -31,9 +30,8 @@
                                     <td>@srNo</td>
                                     <td>@member.Name</td>   
                                     <td>@member.MemberCode</td>
-                                    <td>@member.PhoneNo</td>
+                                    <td>@member.PhoneNumber</td>
                                     <td>@member.DOJ.ToString("dd-MM-yyyy")</td>
-                                    <td> @(member.MembershipStatus == true? "Active" : "InActive" )</td>
                                     <td>
                                         <div class="d-flex justify-content-around flex-wrap gap-2">
                                             <a class="btn btn-outline-primary btn-sm" asp-action="ViewMembership" asp-controller="MemberShip" asp-route-UserId="@member.UserId">View Membership</a>
@@ -48,8 +46,7 @@
                                                class="bi bi-trash text-danger fs-6"
                                                data-delete
                                                data-action="DeleteMember"
-                                               data-controller="MemberShip"
-                                               data-id="@member.MemberId"></a>
+                                               data-controller="MemberShip"></a>
                                        
                                         </div>
                                     </td>
