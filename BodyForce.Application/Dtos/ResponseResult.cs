@@ -8,7 +8,10 @@ namespace BodyForce
 {
     public class ResponseResult
     {
-        
+        public ResponseResult()
+        {
+                
+        }
         public ResponseResult(bool Success, List<string> ErrorMessages)
         {
             this.Success = Success;
@@ -23,6 +26,10 @@ namespace BodyForce
     }
     public class ResponseResult<T> : ResponseResult
     {
+        public ResponseResult() : base()
+        {
+                
+        }
         public ResponseResult(bool success, List<string> errorMessages, T? data = default)
             : base(success, errorMessages)
         {

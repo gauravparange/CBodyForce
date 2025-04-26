@@ -17,6 +17,10 @@ namespace BodyForce
             CreateMap<SignUpDto, User>();
             CreateMap<User, SignUpDto>();
 
+            CreateMap<User, UserDto>().ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
+                .ForMember(dest => dest.MemberCode, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
+
             CreateMap<EditMemberDto, User>();
             CreateMap<User, EditMemberDto>();
 
@@ -25,6 +29,12 @@ namespace BodyForce
             
             CreateMap<MembersDto, MembershipView>();
             CreateMap<MembershipView, MembersDto>();
+
+            CreateMap<MembersDto, MemberShip>();
+            CreateMap<MemberShip, MembersDto>();
+
+            CreateMap<MembershipDto, Payment>();
+            CreateMap<Payment, MembershipDto>();
 
 
         }

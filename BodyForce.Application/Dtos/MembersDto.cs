@@ -18,6 +18,6 @@ namespace BodyForce
         public DateTime? MembershipStartDate { get; set; }
         public DateTime? MembershipEndDate { get; set; }
         public DateTime? RenewalDate { get; set; }
-
+         
     }
 }

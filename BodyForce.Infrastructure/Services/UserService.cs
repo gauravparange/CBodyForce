@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +36,7 @@ namespace BodyForce
             try
             {                
                 var user =  UserRoleMapper.ToIdentityUser(_mapper.Map<User>(signUpDto));
-
+                user.UserName = GetMemberCode();
                 //var user = new ApplicationUser()
                 //{
                 //    FirstName = userEntity.FirstName,
@@ -61,14 +63,7 @@ namespace BodyForce
                         await _userManager.AddToRoleAsync(user, role.Name);
                     }
                     var userID = await _userManager.FindByEmailAsync(user.Email);
-                    var member = new MemberShip()
-                    {
-                        MemberShipId = 0,
-                        UserId = userID.Id,
-                        Status = false
-                    };
-                    var _result = await _unitOfWork.Repository<MemberShip>().AddAsync(member);
-                    await _unitOfWork.Repository<MemberShip>().SaveChangesAsync();
+                    
 
                     string smsMsg = $"Dear {user.FirstName},\n\nYour BodyForce account has been created successfully.\n\nYour login credentials are:\nUsername: {user.UserName}\nPassword: {password}\n\nPlease change your password after logging in.\n\nThank you for choosing BodyForce!\n\nBest regards,\nBodyForce Team";
 
@@ -151,6 +146,34 @@ namespace BodyForce
             {
                 return new ResponseResult(false, new List<string> { ex.Message.ToString() });
             }
+        }
+        public async Task<ResponseResult<IEnumerable<UserDto>>> GetUserList()
+        {
+            var response = new ResponseResult<IEnumerable<UserDto>>()
+            {
+                Success = false,
+                Data = null,
+                ErrorMessages = new List<string>()
+            };
+            try
+            {
+                var userList =  _mapper.Map<IEnumerable<UserDto>>(UserRoleMapper.ToDomainList(await _userManager.Users.ToListAsync()));
+                if (userList.Any())
+                {
+                    response.Data = userList;
+                    response.Success = true;                 
+                }
+                else
+                {
+                    response.ErrorMessages.Add("No Users Found");                  
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessages.Add(ex.Message.ToString());
+            }
+
+            return response;
         }
         public async Task<bool> IsEmailAvailableAsync(string Email)
         {
